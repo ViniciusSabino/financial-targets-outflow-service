@@ -20,7 +20,7 @@ public class EssentialOutflowMapper {
         essentialOutflow.setDueDate(entity.getDueDate());
         essentialOutflow.setValue(entity.getValue());
         essentialOutflow.setPaidValue(entity.getPaidValue());
-        essentialOutflow.setFullyPaid(entity.getIsFullyPaid());
+        essentialOutflow.setFullyPaid(entity.getPaidValue() >= entity.getValue());
         essentialOutflow.setNotes(entity.getNotes());
         essentialOutflow.setCreatedAt(entity.getCreatedAt());
         essentialOutflow.setUpdatedAt(entity.getUpdatedAt());

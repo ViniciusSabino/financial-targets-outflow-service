@@ -47,7 +47,7 @@ public class EssentialOutflowEntity {
     @Column(name = "paid_value", nullable = false)
     private Float paidValue;
 
-    @Column(name = "is_fully_paid", insertable = false)
+    @Column(name = "is_fully_paid", updatable = false, insertable = false)
     private Boolean isFullyPaid;
 
     @Column(name = "notes")
