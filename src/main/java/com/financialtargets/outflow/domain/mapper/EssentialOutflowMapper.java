@@ -8,6 +8,8 @@ import com.financialtargets.outflow.domain.model.EssentialOutflow;
 import com.financialtargets.outflow.infrastructure.entity.EssentialOutflowEntity;
 import lombok.experimental.UtilityClass;
 
+import java.util.List;
+
 @UtilityClass
 public class EssentialOutflowMapper {
 
@@ -29,6 +31,10 @@ public class EssentialOutflowMapper {
         return essentialOutflow;
     }
 
+    public List<EssentialOutflow> toModelList(List<EssentialOutflowEntity> entities) {
+        return entities.stream().map(EssentialOutflowMapper::toModel).toList();
+    }
+
     public EssentialOutflowDTO toDTO(EssentialOutflow essentialOutflow) {
         return EssentialOutflowDTO.builder()
                 .id(essentialOutflow.getId())
@@ -43,5 +49,9 @@ public class EssentialOutflowMapper {
                 .createdAt(DateUtil.formatDateTime(essentialOutflow.getCreatedAt()))
                 .updatedAt(DateUtil.formatDateTime(essentialOutflow.getUpdatedAt()))
                 .build();
+    }
+
+    public List<EssentialOutflowDTO> toDTOList(List<EssentialOutflow> essentialsOutflow) {
+        return essentialsOutflow.stream().map(EssentialOutflowMapper::toDTO).toList();
     }
 }

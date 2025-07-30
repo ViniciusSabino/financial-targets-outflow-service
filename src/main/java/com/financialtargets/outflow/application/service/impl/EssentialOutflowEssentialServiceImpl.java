@@ -3,8 +3,10 @@ package com.financialtargets.outflow.application.service.impl;
 import com.financialtargets.outflow.application.dto.EssentialOutflowCreateDTO;
 import com.financialtargets.outflow.application.dto.EssentialOutflowUpdateDTO;
 import com.financialtargets.outflow.application.service.EssentialOutflowService;
+import com.financialtargets.outflow.application.utils.DateUtil;
 import com.financialtargets.outflow.domain.enums.OutflowRecurrence;
 import com.financialtargets.outflow.domain.exception.EssentialOutflowException;
+import com.financialtargets.outflow.domain.mapper.EssentialOutflowMapper;
 import com.financialtargets.outflow.domain.model.EssentialOutflow;
 import com.financialtargets.outflow.infrastructure.entity.EssentialOutflowEntity;
 import com.financialtargets.outflow.infrastructure.repository.AccountRepository;
@@ -14,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -23,6 +27,16 @@ public class EssentialOutflowEssentialServiceImpl implements EssentialOutflowSer
     private final EssentialOutflowRepository repository;
     private final UserRepository userRepository;
     private final AccountRepository accountRepository;
+
+    @Override
+    public List<EssentialOutflow> listByMonth(String month, String year) {
+        Instant start = DateUtil.getStartDateByFilter(month, year);
+        Instant end = DateUtil.getEndDateByFilter(month, year);
+
+        List<EssentialOutflowEntity> essentialOutflows = repository.findByDueDateBetween(start, end).stream().toList();
+
+        return EssentialOutflowMapper.toModelList(essentialOutflows);
+    }
 
     @Override
     public EssentialOutflow create(EssentialOutflowCreateDTO essentialOutflowCreateDTO) throws EssentialOutflowException {
