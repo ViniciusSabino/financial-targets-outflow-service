@@ -1,0 +1,32 @@
+package com.financialtargets.outflow.presentation.controller.impl;
+
+import com.financialtargets.outflow.application.dto.EssentialOutflowCreateDTO;
+import com.financialtargets.outflow.application.dto.EssentialOutflowDTO;
+import com.financialtargets.outflow.application.service.EssentialOutflowService;
+import com.financialtargets.outflow.domain.exception.EssentialOutflowException;
+import com.financialtargets.outflow.domain.mapper.EssentialOutflowMapper;
+import com.financialtargets.outflow.domain.model.EssentialOutflow;
+import com.financialtargets.outflow.presentation.controller.EssentialOutflowController;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/essential-outflow")
+@RequiredArgsConstructor
+public class EssentialOutflowControllerImpl implements EssentialOutflowController {
+    private final EssentialOutflowService service;
+
+    @PostMapping
+    @Override
+    public ResponseEntity<EssentialOutflowDTO> create(@Valid @RequestBody EssentialOutflowCreateDTO essentialOutflowCreateDTO) throws EssentialOutflowException {
+        EssentialOutflow essentialOutflow = service.create(essentialOutflowCreateDTO);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(EssentialOutflowMapper.toDTO(essentialOutflow));
+    }
+}
