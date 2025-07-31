@@ -6,6 +6,7 @@ import com.financialtargets.outflow.application.service.EssentialOutflowService;
 import com.financialtargets.outflow.application.utils.DateUtil;
 import com.financialtargets.outflow.domain.enums.OutflowRecurrence;
 import com.financialtargets.outflow.domain.exception.EssentialOutflowException;
+import com.financialtargets.outflow.domain.exception.NotFoundException;
 import com.financialtargets.outflow.domain.mapper.EssentialOutflowMapper;
 import com.financialtargets.outflow.domain.model.EssentialOutflow;
 import com.financialtargets.outflow.infrastructure.entity.EssentialOutflowEntity;
@@ -13,7 +14,6 @@ import com.financialtargets.outflow.infrastructure.repository.AccountRepository;
 import com.financialtargets.outflow.infrastructure.repository.EssentialOutflowRepository;
 import com.financialtargets.outflow.infrastructure.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -41,7 +41,7 @@ public class EssentialOutflowEssentialServiceImpl implements EssentialOutflowSer
     @Override
     public EssentialOutflow create(EssentialOutflowCreateDTO essentialOutflowCreateDTO) throws EssentialOutflowException {
         if (!OutflowRecurrence.isValidRecurrence(essentialOutflowCreateDTO.recurrence())) {
-            throw new EssentialOutflowException("Recorrencia inválida para a saída essencial", HttpStatus.BAD_REQUEST);
+            throw new EssentialOutflowException("Recorrencia inválida para a saída essencial");
         }
 
         EssentialOutflowEntity existingEntity = repository.findByName(essentialOutflowCreateDTO.name());
@@ -72,21 +72,21 @@ public class EssentialOutflowEssentialServiceImpl implements EssentialOutflowSer
     }
 
     @Override
-    public EssentialOutflow update(Long id, EssentialOutflowUpdateDTO essentialOutflowUpdateDTO) throws EssentialOutflowException {
+    public EssentialOutflow update(Long id, EssentialOutflowUpdateDTO essentialOutflowUpdateDTO) throws EssentialOutflowException, NotFoundException {
         if (!Objects.isNull(essentialOutflowUpdateDTO.recurrence()) && !OutflowRecurrence.isValidRecurrence(essentialOutflowUpdateDTO.recurrence())) {
-            throw new EssentialOutflowException("Recorrencia inválida para a saída essencial", HttpStatus.BAD_REQUEST);
+            throw new EssentialOutflowException("Recorrencia inválida para a saída essencial");
         }
 
         Optional<EssentialOutflowEntity> optionalExistingEntity = repository.findById(id);
 
         if (optionalExistingEntity.isEmpty()) {
-            throw new EssentialOutflowException("Saída essencial não encontrada", HttpStatus.NOT_FOUND);
+            throw new NotFoundException("Saída essencial não encontrada");
         }
 
         EssentialOutflowEntity currentEntity = optionalExistingEntity.get();
 
         if (Objects.equals(currentEntity.getName(), essentialOutflowUpdateDTO.name()) && !Objects.equals(currentEntity.getId(), id)) {
-            throw new EssentialOutflowException("Já existe uma saída essencial com esse nome", HttpStatus.BAD_REQUEST);
+            throw new EssentialOutflowException("Já existe uma saída essencial com esse nome");
         }
 
         EssentialOutflow essentialOutflowUpdate = new EssentialOutflow(essentialOutflowUpdateDTO);

@@ -8,13 +8,14 @@ import com.financialtargets.outflow.presentation.controller.SummaryController;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/summary")
+@RequestMapping(value = "/summary", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class SummaryControllerImpl implements SummaryController {
     private final SummaryService service;
