@@ -1,7 +1,8 @@
 package com.financialtargets.outflow.presentation.exception;
 
-import com.financialtargets.outflow.domain.exception.EssentialOutflowException;
-import com.financialtargets.outflow.domain.exception.NotFoundException;
+import com.financialtargets.outflow.domain.exception.BadRequestException;
+import com.financialtargets.outflow.domain.exception.BusinessException;
+import com.financialtargets.outflow.domain.exception.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
@@ -49,15 +50,23 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.badRequest().body(response);
     }
 
-    @ExceptionHandler(EssentialOutflowException.class)
-    public ResponseEntity<ExceptionResponse> handleIncomeException(EssentialOutflowException ex) {
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ExceptionResponse> handleIncomeException(BusinessException ex) {
         ExceptionResponse response = new ExceptionResponse(ex.getMessage());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
-    @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<ExceptionResponse> handleNotFoundException(NotFoundException ex) {
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ExceptionResponse> handleBadRequestException(BadRequestException ex) {
+
+        ExceptionResponse response = new ExceptionResponse(ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(response);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleResourceNotFoundException(ResourceNotFoundException ex) {
 
         ExceptionResponse response = new ExceptionResponse(ex.getMessage());
 

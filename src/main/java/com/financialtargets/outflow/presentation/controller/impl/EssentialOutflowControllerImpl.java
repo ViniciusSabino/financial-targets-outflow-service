@@ -4,7 +4,7 @@ import com.financialtargets.outflow.application.dto.EssentialOutflowCreateDTO;
 import com.financialtargets.outflow.application.dto.EssentialOutflowDTO;
 import com.financialtargets.outflow.application.dto.EssentialOutflowUpdateDTO;
 import com.financialtargets.outflow.application.service.EssentialOutflowService;
-import com.financialtargets.outflow.domain.exception.EssentialOutflowException;
+import com.financialtargets.outflow.domain.exception.BusinessException;
 import com.financialtargets.outflow.domain.exception.NotFoundException;
 import com.financialtargets.outflow.domain.mapper.EssentialOutflowMapper;
 import com.financialtargets.outflow.domain.model.EssentialOutflow;
@@ -42,7 +42,7 @@ public class EssentialOutflowControllerImpl implements EssentialOutflowControlle
 
     @PostMapping
     @Override
-    public ResponseEntity<EssentialOutflowDTO> create(@Valid @RequestBody EssentialOutflowCreateDTO essentialOutflowCreateDTO) throws EssentialOutflowException {
+    public ResponseEntity<EssentialOutflowDTO> create(@Valid @RequestBody EssentialOutflowCreateDTO essentialOutflowCreateDTO) throws BusinessException {
         EssentialOutflow essentialOutflow = service.create(essentialOutflowCreateDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(EssentialOutflowMapper.toDTO(essentialOutflow));
@@ -50,7 +50,7 @@ public class EssentialOutflowControllerImpl implements EssentialOutflowControlle
 
     @PatchMapping("/{id}")
     @Override
-    public ResponseEntity<EssentialOutflowDTO> update(@PathVariable("id") String id, @Valid @RequestBody EssentialOutflowUpdateDTO essentialOutflowUpdateDTO) throws EssentialOutflowException, NotFoundException {
+    public ResponseEntity<EssentialOutflowDTO> update(@PathVariable("id") String id, @Valid @RequestBody EssentialOutflowUpdateDTO essentialOutflowUpdateDTO) throws BusinessException, NotFoundException {
         EssentialOutflow essentialOutflow = service.update(Long.valueOf(id), essentialOutflowUpdateDTO);
 
         return ResponseEntity.status(HttpStatus.OK).body(EssentialOutflowMapper.toDTO(essentialOutflow));
