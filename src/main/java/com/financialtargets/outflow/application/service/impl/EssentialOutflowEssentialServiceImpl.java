@@ -14,6 +14,8 @@ import com.financialtargets.outflow.infrastructure.repository.AccountRepository;
 import com.financialtargets.outflow.infrastructure.repository.EssentialOutflowRepository;
 import com.financialtargets.outflow.infrastructure.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -23,12 +25,16 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class EssentialOutflowEssentialServiceImpl implements EssentialOutflowService {
+    private static final Logger log = LoggerFactory.getLogger(EssentialOutflowService.class);
+
     private final EssentialOutflowRepository repository;
     private final UserRepository userRepository;
     private final AccountRepository accountRepository;
 
     @Override
     public List<EssentialOutflow> listByMonth(String month, String year) {
+        log.debug("Listando saídas essenciais para o mês = {} e ano = {}", month, year);
+
         Instant start = DateUtil.getStartDateByFilter(month, year);
         Instant end = DateUtil.getEndDateByFilter(month, year);
 

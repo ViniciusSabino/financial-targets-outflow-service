@@ -3,7 +3,6 @@ package com.financialtargets.outflow.application.service;
 import com.financialtargets.outflow.application.dto.EssentialOutflowCreateDTO;
 import com.financialtargets.outflow.application.dto.EssentialOutflowUpdateDTO;
 import com.financialtargets.outflow.domain.exception.BusinessException;
-import com.financialtargets.outflow.domain.exception.NotFoundException;
 import com.financialtargets.outflow.domain.exception.ResourceNotFoundException;
 import com.financialtargets.outflow.domain.model.EssentialOutflow;
 
@@ -14,5 +13,5 @@ public interface EssentialOutflowService {
 
     EssentialOutflow create(EssentialOutflowCreateDTO essentialOutflowCreateDTO) throws BusinessException;
 
-    EssentialOutflow update(Long id, EssentialOutflowUpdateDTO essentialOutflowUpdateDTO) throws BusinessException, NotFoundException, ResourceNotFoundException;
+    EssentialOutflow update(Long id, EssentialOutflowUpdateDTO essentialOutflowUpdateDTO) throws BusinessException, ResourceNotFoundException;
 }

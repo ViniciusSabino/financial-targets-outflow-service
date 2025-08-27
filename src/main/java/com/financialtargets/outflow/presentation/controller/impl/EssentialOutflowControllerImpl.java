@@ -5,7 +5,7 @@ import com.financialtargets.outflow.application.dto.EssentialOutflowDTO;
 import com.financialtargets.outflow.application.dto.EssentialOutflowUpdateDTO;
 import com.financialtargets.outflow.application.service.EssentialOutflowService;
 import com.financialtargets.outflow.domain.exception.BusinessException;
-import com.financialtargets.outflow.domain.exception.NotFoundException;
+import com.financialtargets.outflow.domain.exception.ResourceNotFoundException;
 import com.financialtargets.outflow.domain.mapper.EssentialOutflowMapper;
 import com.financialtargets.outflow.domain.model.EssentialOutflow;
 import com.financialtargets.outflow.presentation.controller.EssentialOutflowController;
@@ -50,7 +50,7 @@ public class EssentialOutflowControllerImpl implements EssentialOutflowControlle
 
     @PatchMapping("/{id}")
     @Override
-    public ResponseEntity<EssentialOutflowDTO> update(@PathVariable("id") String id, @Valid @RequestBody EssentialOutflowUpdateDTO essentialOutflowUpdateDTO) throws BusinessException, NotFoundException {
+    public ResponseEntity<EssentialOutflowDTO> update(@PathVariable("id") String id, @Valid @RequestBody EssentialOutflowUpdateDTO essentialOutflowUpdateDTO) throws BusinessException, ResourceNotFoundException {
         EssentialOutflow essentialOutflow = service.update(Long.valueOf(id), essentialOutflowUpdateDTO);
 
         return ResponseEntity.status(HttpStatus.OK).body(EssentialOutflowMapper.toDTO(essentialOutflow));
