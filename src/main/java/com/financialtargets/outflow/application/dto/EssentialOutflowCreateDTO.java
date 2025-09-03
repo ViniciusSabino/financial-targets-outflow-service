@@ -7,6 +7,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import org.hibernate.validator.constraints.Length;
 
+import java.math.BigDecimal;
+
 public record EssentialOutflowCreateDTO (
         @NotNull
         @JsonProperty("name")
@@ -15,7 +17,7 @@ public record EssentialOutflowCreateDTO (
         @NotNull
         @Positive
         @JsonProperty("value")
-        Float value,
+        BigDecimal value,
 
         @NotNull
         @JsonProperty("dueDate")
@@ -24,7 +26,7 @@ public record EssentialOutflowCreateDTO (
         @NotNull
         @Min(0)
         @JsonProperty("paidValue")
-        Float paidValue,
+        BigDecimal paidValue,
 
         @Length(max = 100)
         @JsonProperty("notes")

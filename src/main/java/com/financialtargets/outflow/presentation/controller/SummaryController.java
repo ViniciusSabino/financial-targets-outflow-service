@@ -31,5 +31,5 @@ public interface SummaryController {
                     @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)
             }
     )
-    ResponseEntity<EssentialOutflowSummaryDTO> getEssentialOutflowSummary(@RequestParam @Valid @NonNull String month, @RequestParam @NonNull @Valid String year);
+    ResponseEntity<EssentialOutflowSummaryDTO> getEssentialOutflowSummary(@RequestParam @Valid @NonNull String month, @RequestParam @NonNull @Valid String year) throws Exception;
 }

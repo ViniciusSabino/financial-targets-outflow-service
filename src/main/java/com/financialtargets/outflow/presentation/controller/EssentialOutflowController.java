@@ -35,7 +35,7 @@ public interface EssentialOutflowController {
                     @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)
             }
     )
-    ResponseEntity<List<EssentialOutflowDTO>> listByMonth(String month, String year);
+    ResponseEntity<List<EssentialOutflowDTO>> listByMonth(String month, String year) throws Exception;
 
     @Operation(summary = "Create a Essential Outflow",
             description = "Create a Essential Outflow",

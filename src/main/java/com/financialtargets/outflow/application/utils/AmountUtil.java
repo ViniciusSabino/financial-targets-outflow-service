@@ -7,11 +7,11 @@ import java.math.RoundingMode;
 
 @UtilityClass
 public class AmountUtil {
-    public String formatAmount(Float amount) {
+    public String formatAmount(BigDecimal amount) {
         if (amount == null) return "R$ 0,00";
 
-        BigDecimal decimal = BigDecimal.valueOf(amount).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal adjustedAmount = amount.setScale(2, RoundingMode.HALF_UP);
 
-        return "R$ " + decimal.toString().replace(".", ",");
+        return "R$ " + adjustedAmount.toString().replace(".", ",");
     }
 }

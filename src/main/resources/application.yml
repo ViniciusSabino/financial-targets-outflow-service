@@ -7,7 +7,7 @@ spring:
     password: G~w<Yq=&fU;93kNLZ
   jpa:
     hibernate:
-      ## ddl-auto: update
+      ddl-auto: validate
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
@@ -18,35 +18,9 @@ server:
     contextPath: /api
   info:
     app:
-      name: Financial Targets Outflow Service
+      name: financial-targets-outflow-service
       version: '0.0.1-SNAPSHOT'
 logging:
   level:
     root: INFO
     com.financialtargets: DEBUG
-  pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n"
-  file:
-    name: outflow-service.log
-    max-size: 10MB
-    max-history: 30
-  # — Exemplo de configuração com Logstash JSON Encoder (se usar)
-    # logging:
-    #   level:
-    #     root: INFO
-    #     com.financialtargets: DEBUG
-    #   file:
-    #     name: outflow-service-json.log
-    #     max-size: 10MB
-    #     max-history: 30
-    #   logstash:
-    #     enabled: true
-    #     encoder.pattern: |
-    #       {
-    #         "timestamp": "%date{ISO8601}",
-    #         "level": "%level",
-    #         "thread": "%thread",
-    #         "logger": "%logger",
-    #         "message": "%message",
-    #         "context": "%mdc"
-    #       }

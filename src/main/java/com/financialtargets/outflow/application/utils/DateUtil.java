@@ -1,8 +1,10 @@
 package com.financialtargets.outflow.application.utils;
 
 import com.financialtargets.outflow.domain.contants.DateConstants;
+import com.financialtargets.outflow.domain.exception.BadRequestException;
 import lombok.experimental.UtilityClass;
 
+import java.time.DateTimeException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -31,20 +33,37 @@ public class DateUtil {
         return fmt.format(date);
     }
 
-    public Instant getStartDateByFilter(String month, String year) {
-        DateTimeFormatter fmt = DateTimeFormatter.ofPattern(DateConstants.DEFAULT_DATE_FORMAT).withZone(DateConstants.DEFAULT_TIME_ZONE);
+    public Instant getStartDateByFilter(Integer month, Integer year) throws Exception {
+        try {
+            DateTimeFormatter fmt = DateTimeFormatter.ofPattern(DateConstants.DEFAULT_DATE_FORMAT).withZone(DateConstants.DEFAULT_TIME_ZONE);
 
-        LocalDate firstDateOfMonth = LocalDate.parse(String.format("01/%s/%s", month, year), fmt);
+            String adjustedMonth = month.toString().length() < 2 ? "0" + month : month.toString();
 
-        return firstDateOfMonth.atStartOfDay(DateConstants.DEFAULT_TIME_ZONE).toInstant();
+            LocalDate firstDateOfMonth = LocalDate.parse(String.format("01/%s/%s", adjustedMonth, year), fmt);
+
+            return firstDateOfMonth.atStartOfDay(DateConstants.DEFAULT_TIME_ZONE).toInstant();
+        } catch (DateTimeException e) {
+            throw new BadRequestException(e.getMessage());
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
     }
 
-    public Instant getEndDateByFilter(String month, String year) {
-        DateTimeFormatter fmt = DateTimeFormatter.ofPattern(DateConstants.DEFAULT_DATE_FORMAT).withZone(DateConstants.DEFAULT_TIME_ZONE);
+    public Instant getEndDateByFilter(Integer month, Integer year) throws Exception {
+        try {
+            DateTimeFormatter fmt = DateTimeFormatter.ofPattern(DateConstants.DEFAULT_DATE_FORMAT).withZone(DateConstants.DEFAULT_TIME_ZONE);
 
-        LocalDate firstDateOfMonth = LocalDate.parse(String.format("01/%s/%s", month, year), fmt);
-        LocalDate lastDateOfMonth = firstDateOfMonth.withDayOfMonth(firstDateOfMonth.lengthOfMonth());
+            String adjustedMonth = month.toString().length() < 2 ? "0" + month : month.toString();
 
-        return lastDateOfMonth.atTime(23, 59, 59, 999).atZone(DateConstants.DEFAULT_TIME_ZONE).toInstant();
+            LocalDate firstDateOfMonth = LocalDate.parse(String.format("01/%s/%s", adjustedMonth, year), fmt);
+            LocalDate lastDateOfMonth = firstDateOfMonth.withDayOfMonth(firstDateOfMonth.lengthOfMonth());
+
+            return lastDateOfMonth.atTime(23, 59, 59, 999).atZone(DateConstants.DEFAULT_TIME_ZONE).toInstant();
+        } catch (DateTimeException e) {
+            throw new BadRequestException(e.getMessage());
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+
+        }
     }
 }

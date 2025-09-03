@@ -6,6 +6,7 @@ import com.financialtargets.outflow.application.utils.DateUtil;
 import com.financialtargets.outflow.domain.enums.OutflowRecurrence;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Objects;
 
@@ -15,11 +16,11 @@ public class EssentialOutflow {
 
     private String name;
 
-    private Float value;
+    private BigDecimal value;
 
     private Instant dueDate;
 
-    private Float paidValue;
+    private BigDecimal paidValue;
 
     private boolean isFullyPaid;
 

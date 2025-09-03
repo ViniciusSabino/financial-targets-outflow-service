@@ -9,7 +9,7 @@ import com.financialtargets.outflow.domain.model.EssentialOutflow;
 import java.util.List;
 
 public interface EssentialOutflowService {
-    List<EssentialOutflow> listByMonth(String month, String year);
+    List<EssentialOutflow> listByMonth(Integer month, Integer year) throws Exception;
 
     EssentialOutflow create(EssentialOutflowCreateDTO essentialOutflowCreateDTO) throws BusinessException;
 

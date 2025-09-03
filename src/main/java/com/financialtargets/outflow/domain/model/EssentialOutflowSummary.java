@@ -2,14 +2,16 @@ package com.financialtargets.outflow.domain.model;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 public class EssentialOutflowSummary {
 
-    private Float totalAmount;
+    private BigDecimal totalAmount;
 
-    private Float totalAmountProcessed;
+    private BigDecimal totalAmountProcessed;
 
-    private Float totalAmountRemaining;
+    private BigDecimal totalAmountRemaining;
 
-    private Float percentageOfIncomes;
+    private BigDecimal percentageOfIncomes;
 }

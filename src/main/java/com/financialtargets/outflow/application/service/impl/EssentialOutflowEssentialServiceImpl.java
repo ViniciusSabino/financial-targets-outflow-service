@@ -14,31 +14,33 @@ import com.financialtargets.outflow.infrastructure.repository.AccountRepository;
 import com.financialtargets.outflow.infrastructure.repository.EssentialOutflowRepository;
 import com.financialtargets.outflow.infrastructure.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class EssentialOutflowEssentialServiceImpl implements EssentialOutflowService {
-    private static final Logger log = LoggerFactory.getLogger(EssentialOutflowService.class);
 
     private final EssentialOutflowRepository repository;
     private final UserRepository userRepository;
     private final AccountRepository accountRepository;
 
     @Override
-    public List<EssentialOutflow> listByMonth(String month, String year) {
-        log.debug("Listando saídas essenciais para o mês = {} e ano = {}", month, year);
-
+    public List<EssentialOutflow> listByMonth(Integer month, Integer year) throws Exception {
         Instant start = DateUtil.getStartDateByFilter(month, year);
         Instant end = DateUtil.getEndDateByFilter(month, year);
 
+        log.info("Listing essential outflows for the period {} to {}", start, end);
+
         List<EssentialOutflowEntity> essentialOutflows = repository.findByDueDateBetween(start, end).stream().toList();
+
+        log.info("Listed {} essential outflows successfully", essentialOutflows.stream().toList().size());
 
         return EssentialOutflowMapper.toModelList(essentialOutflows);
     }
@@ -46,7 +48,7 @@ public class EssentialOutflowEssentialServiceImpl implements EssentialOutflowSer
     @Override
     public EssentialOutflow create(EssentialOutflowCreateDTO essentialOutflowCreateDTO) throws BusinessException {
         if (!OutflowRecurrence.isValidRecurrence(essentialOutflowCreateDTO.recurrence())) {
-            throw new BusinessException("Recorrencia inválida para a saída essencial");
+            throw new BusinessException("Invalid recurrence for create a new essential outflow");
         }
 
         EssentialOutflowEntity existingEntity = repository.findByName(essentialOutflowCreateDTO.name());
@@ -55,7 +57,7 @@ public class EssentialOutflowEssentialServiceImpl implements EssentialOutflowSer
 
         EssentialOutflow essentialOutflow = new EssentialOutflow(essentialOutflowCreateDTO);
 
-        if (essentialOutflowCreateDTO.paidValue() >= essentialOutflowCreateDTO.value()) {
+        if (essentialOutflowCreateDTO.paidValue().compareTo(essentialOutflowCreateDTO.value()) >= 0) {
             essentialOutflow.setPaidValue(essentialOutflowCreateDTO.value());
         }
 
@@ -73,38 +75,42 @@ public class EssentialOutflowEssentialServiceImpl implements EssentialOutflowSer
         entity.setCreatedAt(essentialOutflow.getCreatedAt());
         entity.setUpdatedAt(essentialOutflow.getUpdatedAt());
 
-        return repository.save(entity).toModel();
+        EssentialOutflow savedOutflow = repository.save(entity).toModel();
+
+        log.info("Outflow created successfully, id: {}", savedOutflow.getId());
+
+        return savedOutflow;
     }
 
     @Override
     public EssentialOutflow update(Long id, EssentialOutflowUpdateDTO essentialOutflowUpdateDTO) throws BusinessException, ResourceNotFoundException {
         if (!Objects.isNull(essentialOutflowUpdateDTO.recurrence()) && !OutflowRecurrence.isValidRecurrence(essentialOutflowUpdateDTO.recurrence())) {
-            throw new BusinessException("Recorrencia inválida para a saída essencial");
+            throw new BusinessException("Invalid recurrence for create a new essential outflow");
         }
 
-        EssentialOutflowEntity currentOutflow = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Saída essencial não encontrada"));
+        EssentialOutflowEntity currentOutflow = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Essential outflow not found"));
 
         if (Objects.equals(currentOutflow.getName(), essentialOutflowUpdateDTO.name()) && !Objects.equals(currentOutflow.getId(), id)) {
-            throw new BusinessException("Já existe uma saída essencial com esse nome");
+            throw new BusinessException("There is already an essential exit with that name");
         }
 
         EssentialOutflow essentialOutflowUpdate = new EssentialOutflow(essentialOutflowUpdateDTO);
 
         if (Objects.isNull(essentialOutflowUpdateDTO.paidValue())) {
             if (!Objects.isNull(essentialOutflowUpdateDTO.value())) {
-                Float paidValue = currentOutflow.getPaidValue() >= essentialOutflowUpdate.getValue() ? essentialOutflowUpdate.getValue() : currentOutflow.getPaidValue();
+                BigDecimal paidValue = currentOutflow.getPaidValue().compareTo(essentialOutflowUpdate.getValue()) >= 0  ? essentialOutflowUpdate.getValue() : currentOutflow.getPaidValue();
 
                 essentialOutflowUpdate.setPaidValue(paidValue);
                 currentOutflow.setPaidValue(paidValue);
             }
         } else {
-            Float paidValue;
+            BigDecimal paidValue;
 
             if (Objects.isNull(essentialOutflowUpdateDTO.value())) {
-                paidValue = essentialOutflowUpdate.getPaidValue() >= currentOutflow.getValue() ? currentOutflow.getValue() : essentialOutflowUpdate.getPaidValue();
+                paidValue = essentialOutflowUpdate.getPaidValue().compareTo(currentOutflow.getValue()) >= 0 ? currentOutflow.getValue() : essentialOutflowUpdate.getPaidValue();
 
             } else {
-                paidValue = essentialOutflowUpdate.getPaidValue() >= essentialOutflowUpdate.getValue() ? essentialOutflowUpdateDTO.value() : essentialOutflowUpdateDTO.paidValue();
+                paidValue = essentialOutflowUpdate.getPaidValue().compareTo(essentialOutflowUpdate.getValue()) >= 0 ? essentialOutflowUpdateDTO.value() : essentialOutflowUpdateDTO.paidValue();
             }
 
             essentialOutflowUpdate.setPaidValue(paidValue);
@@ -115,14 +121,14 @@ public class EssentialOutflowEssentialServiceImpl implements EssentialOutflowSer
             currentOutflow.setAccount(accountRepository.getReferenceById(essentialOutflowUpdateDTO.accountId()));
 
         if (!Objects.isNull(essentialOutflowUpdate.getName())) currentOutflow.setName(essentialOutflowUpdate.getName());
-        if (!Objects.isNull(essentialOutflowUpdate.getValue()))
-            currentOutflow.setValue(essentialOutflowUpdate.getValue());
-        if (!Objects.isNull(essentialOutflowUpdate.getDueDate()))
-            currentOutflow.setDueDate(essentialOutflowUpdate.getDueDate());
-        if (!Objects.isNull(essentialOutflowUpdate.getNotes()))
-            currentOutflow.setNotes(essentialOutflowUpdate.getNotes());
-        if (!Objects.isNull(essentialOutflowUpdate.getRecurrence()))
-            currentOutflow.setRecurrence(essentialOutflowUpdate.getRecurrence().name());
+        if (!Objects.isNull(essentialOutflowUpdate.getValue())) currentOutflow.setValue(essentialOutflowUpdate.getValue());
+        if (!Objects.isNull(essentialOutflowUpdate.getDueDate())) currentOutflow.setDueDate(essentialOutflowUpdate.getDueDate());
+        if (!Objects.isNull(essentialOutflowUpdate.getNotes())) currentOutflow.setNotes(essentialOutflowUpdate.getNotes());
+        if (!Objects.isNull(essentialOutflowUpdate.getRecurrence())) currentOutflow.setRecurrence(essentialOutflowUpdate.getRecurrence().name());
+
+        EssentialOutflow updatedOutflow = repository.save(currentOutflow).toModel();
+
+        log.info("Outflow updated successfully, id: {}", updatedOutflow.getId());
 
         return repository.save(currentOutflow).toModel();
     }

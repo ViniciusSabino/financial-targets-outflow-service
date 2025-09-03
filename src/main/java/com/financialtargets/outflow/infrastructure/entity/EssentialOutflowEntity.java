@@ -15,6 +15,7 @@ import jakarta.persistence.TemporalType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 
 @NoArgsConstructor
@@ -27,11 +28,11 @@ public class EssentialOutflowEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false, unique = true)
+    @JoinColumn(name = "user_id", nullable = false)
     private UsersEntity user;
 
     @ManyToOne
-    @JoinColumn(name = "account_id", nullable = false, unique = true)
+    @JoinColumn(name = "account_id", nullable = false)
     private AccountEntity account;
 
     @Column(name = "name", nullable = false, unique = true)
@@ -42,10 +43,10 @@ public class EssentialOutflowEntity {
     private Instant dueDate;
 
     @Column(name = "value", nullable = false)
-    private Float value;
+    private BigDecimal value;
 
     @Column(name = "paid_value", nullable = false)
-    private Float paidValue;
+    private BigDecimal paidValue;
 
     @Column(name = "is_fully_paid", updatable = false, insertable = false)
     private Boolean isFullyPaid;
@@ -57,11 +58,9 @@ public class EssentialOutflowEntity {
     private String recurrence;
 
     @Column(name = "created_at", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
     private Instant createdAt;
 
     @Column(name = "updated_at", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
     private Instant updatedAt;
 
     public EssentialOutflow toModel() {

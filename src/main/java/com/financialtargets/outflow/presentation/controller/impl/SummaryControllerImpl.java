@@ -7,6 +7,7 @@ import com.financialtargets.outflow.domain.model.EssentialOutflowSummary;
 import com.financialtargets.outflow.presentation.controller.SummaryController;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +18,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/summary", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
+@Slf4j
 public class SummaryControllerImpl implements SummaryController {
     private final SummaryService service;
 
     @GetMapping("/essential-outflow")
     @Override
-    public ResponseEntity<EssentialOutflowSummaryDTO> getEssentialOutflowSummary(@NonNull String month, @NonNull String year) {
+    public ResponseEntity<EssentialOutflowSummaryDTO> getEssentialOutflowSummary(@NonNull String month, @NonNull String year) throws Exception {
+        log.trace("GET /summary/essential-outflow - Get essential outflows summary by month: {} and year: {}", month, year);
+
         EssentialOutflowSummary essentialOutflowSummary = service.getEssentialOutflowSummary(month, year);
 
         return ResponseEntity.status(HttpStatus.OK).body(SummaryMapper.mapOutflowSummary(essentialOutflowSummary));

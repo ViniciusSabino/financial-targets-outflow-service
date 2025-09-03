@@ -12,6 +12,7 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 
 @Entity
@@ -30,7 +31,7 @@ public class AccountEntity {
     private String name;
 
     @Column(name = "balance", nullable = false)
-    private float balance;
+    private BigDecimal balance;
 
     @Column(name = "is_main", nullable = false)
     private boolean isMain;

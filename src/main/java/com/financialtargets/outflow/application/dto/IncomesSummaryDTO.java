@@ -3,6 +3,8 @@ package com.financialtargets.outflow.application.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 
+import java.math.BigDecimal;
+
 
 @Builder
 public record IncomesSummaryDTO(
@@ -10,13 +12,13 @@ public record IncomesSummaryDTO(
         String totalExpected,
 
         @JsonProperty("totalExpectedValue")
-        Float totalExpectedValue,
+        BigDecimal totalExpectedValue,
 
         @JsonProperty("totalReceived")
         String totalReceived,
 
         @JsonProperty("totalReceivedValue")
-        Float totalReceivedValue,
+        BigDecimal totalReceivedValue,
 
         @JsonProperty("countExpected")
         Integer countExpected,
