@@ -1,7 +1,8 @@
 package com.financialtargets.outflow.infrastructure.entity;
 
 import com.financialtargets.outflow.domain.mapper.EssentialOutflowMapper;
-import com.financialtargets.outflow.domain.model.EssentialOutflow;
+import com.financialtargets.outflow.domain.mapper.OutflowAllocationMapper;
+import com.financialtargets.outflow.domain.model.OutflowAllocation;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,8 +20,8 @@ import java.time.Instant;
 @NoArgsConstructor
 @Entity
 @Data
-@Table(name = "essential_outflows")
-public class EssentialOutflowEntity {
+@Table(name = "outflow_allocations")
+public class OutflowAllocationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -36,23 +37,26 @@ public class EssentialOutflowEntity {
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    @Column(name = "due_date", nullable = false)
-    private Instant dueDate;
+    @Column(name = "defined_percentage", nullable = false)
+    private BigDecimal definedPercentage;
 
     @Column(name = "value", nullable = false)
     private BigDecimal value;
 
-    @Column(name = "paid_value", nullable = false)
-    private BigDecimal paidValue;
+    @Column(name = "applied_value", nullable = false)
+    private BigDecimal appliedValue;
 
-    @Column(name = "is_fully_paid", updatable = false, insertable = false)
-    private Boolean isFullyPaid;
+    @Column(name = "is_fully_applied", updatable = false, insertable = false)
+    private Boolean isFullyApplied;
 
-    @Column(name = "notes")
-    private String notes;
+    @Column(name = "allocation_date", nullable = false)
+    private Instant allocationDate;
 
     @Column(name = "recurrence")
     private String recurrence;
+
+    @Column(name = "notes")
+    private String notes;
 
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
@@ -60,7 +64,7 @@ public class EssentialOutflowEntity {
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
 
-    public EssentialOutflow toModel() {
-        return EssentialOutflowMapper.toModel(this);
+    public OutflowAllocation toModel() {
+        return OutflowAllocationMapper.toModel(this);
     }
 }

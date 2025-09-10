@@ -34,8 +34,7 @@ public class EssentialOutflow {
 
     private Instant updatedAt;
 
-    public EssentialOutflow() {
-    }
+    public EssentialOutflow() {}
 
     public EssentialOutflow(EssentialOutflowCreateDTO essentialOutflowCreateDTO) {
         this.name = essentialOutflowCreateDTO.name();

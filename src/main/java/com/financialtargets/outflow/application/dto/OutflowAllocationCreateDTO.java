@@ -8,10 +8,15 @@ import org.hibernate.validator.constraints.Length;
 
 import java.math.BigDecimal;
 
-public record EssentialOutflowCreateDTO (
+public record OutflowAllocationCreateDTO(
         @NotNull
         @JsonProperty("name")
         String name,
+
+        @NotNull
+        @Positive
+        @JsonProperty("definedPercentage")
+        BigDecimal definedPercentage,
 
         @NotNull
         @Positive
@@ -19,13 +24,18 @@ public record EssentialOutflowCreateDTO (
         BigDecimal value,
 
         @NotNull
-        @JsonProperty("dueDate")
-        String dueDate,
+        @Min(0)
+        @JsonProperty("appliedValue")
+        BigDecimal appliedValue,
 
         @NotNull
-        @Min(0)
-        @JsonProperty("paidValue")
-        BigDecimal paidValue,
+        @JsonProperty("allocationDate")
+        String allocationDate,
+
+        @NotNull
+        @Length(max = 20)
+        @JsonProperty("recurrence")
+        String recurrence,
 
         @Length(max = 100)
         @JsonProperty("notes")
@@ -39,10 +49,5 @@ public record EssentialOutflowCreateDTO (
         @NotNull
         @Positive
         @JsonProperty("userId")
-        Long userId,
-
-        @NotNull
-        @Length(max = 20)
-        @JsonProperty("recurrence")
-        String recurrence
+        Long userId
 ) { }

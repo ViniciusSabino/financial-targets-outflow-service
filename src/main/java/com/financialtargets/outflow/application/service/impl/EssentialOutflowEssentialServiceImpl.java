@@ -38,11 +38,11 @@ public class EssentialOutflowEssentialServiceImpl implements EssentialOutflowSer
 
         log.info("Listing essential outflows for the period {} to {}", start, end);
 
-        List<EssentialOutflowEntity> essentialOutflows = repository.findByDueDateBetween(start, end).stream().toList();
+        List<EssentialOutflowEntity> outflows = repository.findByDueDateBetween(start, end).stream().toList();
 
-        log.info("Listed {} essential outflows successfully", essentialOutflows.stream().toList().size());
+        log.info("Listed {} essential outflows successfully", outflows.stream().toList().size());
 
-        return EssentialOutflowMapper.toModelList(essentialOutflows);
+        return EssentialOutflowMapper.toModelList(outflows);
     }
 
     @Override
