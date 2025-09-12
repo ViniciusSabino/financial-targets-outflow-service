@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.context.annotation.Conditional;
 
 import java.math.BigDecimal;
 
@@ -13,12 +14,10 @@ public record OutflowAllocationCreateDTO(
         @JsonProperty("name")
         String name,
 
-        @NotNull
         @Positive
         @JsonProperty("definedPercentage")
         BigDecimal definedPercentage,
 
-        @NotNull
         @Positive
         @JsonProperty("value")
         BigDecimal value,

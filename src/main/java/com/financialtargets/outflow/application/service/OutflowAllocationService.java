@@ -9,5 +9,7 @@ import java.util.List;
 public interface OutflowAllocationService {
     List<OutflowAllocation> listByMonth(Integer month, Integer year) throws Exception;
 
-    OutflowAllocation create(OutflowAllocationCreateDTO outflowAllocationCreateDTO) throws BusinessException;
+    OutflowAllocation create(OutflowAllocationCreateDTO outflowAllocationCreateDTO) throws Exception;
+
+    OutflowAllocation fullyApplied(Long id) throws BusinessException;
 }

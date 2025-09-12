@@ -51,5 +51,23 @@ public interface OutflowAllocationController {
                     @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)
             }
     )
-    ResponseEntity<OutflowAllocationDTO> create(OutflowAllocationCreateDTO outflowAllocationCreateDTO) throws BusinessException;
+    ResponseEntity<OutflowAllocationDTO> create(OutflowAllocationCreateDTO outflowAllocationCreateDTO) throws Exception;
+
+    @Operation(summary = "Making full applied of an allocation",
+            description = "Making full applied of an allocation",
+            tags = {"OutflowAllocation"},
+            responses = {
+                    @ApiResponse(description = "Success", responseCode = "200", content = {
+                            @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = OutflowAllocationDTO.class)
+                            )
+                    }),
+                    @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
+                    @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
+                    @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
+                    @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)
+            }
+    )
+    ResponseEntity<OutflowAllocationDTO> fullyApplied(String id) throws BusinessException;
 }

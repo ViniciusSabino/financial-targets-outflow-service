@@ -2,11 +2,13 @@ package com.financialtargets.outflow.application.service.impl;
 
 import com.financialtargets.outflow.application.dto.OutflowAllocationCreateDTO;
 import com.financialtargets.outflow.application.service.OutflowAllocationService;
+import com.financialtargets.outflow.application.service.SummaryService;
 import com.financialtargets.outflow.application.utils.DateUtil;
 import com.financialtargets.outflow.domain.enums.OutflowRecurrence;
 import com.financialtargets.outflow.domain.exception.BusinessException;
 import com.financialtargets.outflow.domain.mapper.OutflowAllocationMapper;
 import com.financialtargets.outflow.domain.model.OutflowAllocation;
+import com.financialtargets.outflow.domain.model.OutflowAllocationSummary;
 import com.financialtargets.outflow.infrastructure.entity.OutflowAllocationEntity;
 import com.financialtargets.outflow.infrastructure.repository.AccountRepository;
 import com.financialtargets.outflow.infrastructure.repository.OutflowAllocationRepository;
@@ -15,9 +17,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +34,8 @@ public class OutflowAllocationServiceImpl implements OutflowAllocationService {
     private final OutflowAllocationRepository repository;
     private final UserRepository userRepository;
     private final AccountRepository accountRepository;
+
+    private final SummaryService summaryService;
 
     @Override
     public List<OutflowAllocation> listByMonth(Integer month, Integer year) throws Exception {
@@ -43,10 +52,15 @@ public class OutflowAllocationServiceImpl implements OutflowAllocationService {
     }
 
     @Override
-    public OutflowAllocation create(OutflowAllocationCreateDTO outflowAllocationCreateDTO) throws BusinessException {
-        if (!OutflowRecurrence.isValidRecurrence(outflowAllocationCreateDTO.recurrence())) {
+    public OutflowAllocation create(OutflowAllocationCreateDTO outflowAllocationCreateDTO) throws Exception {
+        if (!OutflowRecurrence.isValidRecurrence(outflowAllocationCreateDTO.recurrence()))
             throw new BusinessException("Invalid recurrence for create a new outflow allocation");
-        }
+
+        if (Objects.isNull(outflowAllocationCreateDTO.definedPercentage()) && Objects.isNull(outflowAllocationCreateDTO.value()))
+            throw new BusinessException("Choose between setting \"value\" or \"definedPercentage\"");
+
+        if (!Objects.isNull(outflowAllocationCreateDTO.definedPercentage()) && !Objects.isNull(outflowAllocationCreateDTO.value()))
+            throw new BusinessException("Choose between setting \"value\" or \"definedPercentage\"");
 
         OutflowAllocationEntity existingEntity = repository.findByName(outflowAllocationCreateDTO.name());
 
@@ -54,9 +68,21 @@ public class OutflowAllocationServiceImpl implements OutflowAllocationService {
 
         OutflowAllocation outflowAllocation = new OutflowAllocation(outflowAllocationCreateDTO);
 
-        if (outflowAllocationCreateDTO.appliedValue().compareTo(outflowAllocationCreateDTO.value()) >= 0) {
-            outflowAllocation.setAppliedValue(outflowAllocationCreateDTO.value());
+        Integer currentMonth = DateUtil.getNowLocalDate().getMonth().getValue();
+        Integer currentYear = DateUtil.getNowLocalDate().getYear();
+
+        OutflowAllocationSummary outflowAllocationSummary = summaryService.getOutflowAllocationSummary(currentMonth, currentYear);
+
+        if ((Objects.isNull(outflowAllocation.getDefinedPercentage()))) {
+            outflowAllocation.setDefinedPercentage(outflowAllocationSummary.getTotalAmount().divide(outflowAllocation.getValue(), 2, RoundingMode.HALF_UP));
+        } else {
+            BigDecimal percentage = outflowAllocation.getDefinedPercentage().divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+
+            outflowAllocation.setValue(percentage.multiply(outflowAllocationSummary.getTotalAmount()));
         }
+
+        if (outflowAllocationCreateDTO.appliedValue().compareTo(outflowAllocation.getValue()) >= 0)
+            outflowAllocation.setAppliedValue(outflowAllocation.getValue());
 
         OutflowAllocationEntity entity = new OutflowAllocationEntity();
 
@@ -78,5 +104,21 @@ public class OutflowAllocationServiceImpl implements OutflowAllocationService {
         log.info("Allocation created successfully, id: {}", savedAllocation.getId());
 
         return savedAllocation;
+    }
+
+    @Override
+    public OutflowAllocation fullyApplied(Long id) throws BusinessException {
+        Optional<OutflowAllocationEntity> optionalOutflowAllocation = repository.findById(id);
+
+        if (optionalOutflowAllocation.isEmpty()) {
+            throw new BusinessException("Outflow allocation not found");
+        }
+
+        OutflowAllocationEntity entity = optionalOutflowAllocation.get();
+
+        entity.setIsFullyApplied(true);
+        entity.setAppliedValue(entity.getValue());
+
+        return repository.save(entity).toModel();
     }
 }

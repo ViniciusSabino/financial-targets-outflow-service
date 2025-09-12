@@ -5,8 +5,7 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 @Data
-public class EssentialOutflowSummary {
-
+public class OutflowAllocationSummary {
     private BigDecimal totalIncomesReceived;
 
     private BigDecimal totalAmount;
@@ -16,4 +15,11 @@ public class EssentialOutflowSummary {
     private BigDecimal totalAmountRemaining;
 
     private BigDecimal percentageOfIncomes;
+
+    private Integer numberOfAllocations;
+
+    private BigDecimal percentageCurrentlyReserved;
+
+    private BigDecimal remainingPercentage;
+
 }

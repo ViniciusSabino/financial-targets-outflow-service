@@ -12,8 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,6 +23,7 @@ import java.util.List;
 public class OutflowAllocationControllerImpl implements OutflowAllocationController {
     private final OutflowAllocationService service;
 
+    @GetMapping
     @Override
     public ResponseEntity<List<OutflowAllocationDTO>> listByMonth(String month, String year) throws Exception {
         log.trace("GET /outflow-allocation - List outflow allocations by month: {} and year: {}", month, year);
@@ -33,13 +33,24 @@ public class OutflowAllocationControllerImpl implements OutflowAllocationControl
         return ResponseEntity.status(HttpStatus.OK).body(OutflowAllocationMapper.toDTOList(outflowAllocations));
     }
 
+    @PostMapping
     @Override
-    public ResponseEntity<OutflowAllocationDTO> create(OutflowAllocationCreateDTO outflowAllocationCreateDTO) throws BusinessException {
+    public ResponseEntity<OutflowAllocationDTO> create(@RequestBody OutflowAllocationCreateDTO outflowAllocationCreateDTO) throws Exception {
         log.trace("POST /outflow-allocation - Creating a new outflow allocation for user {}", outflowAllocationCreateDTO.userId());
         log.debug("Request body: {}", outflowAllocationCreateDTO);
 
         OutflowAllocation outflowAllocation = service.create(outflowAllocationCreateDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(OutflowAllocationMapper.toDTO(outflowAllocation));
+    }
+
+    @PatchMapping("{id}/fully-applied")
+    @Override
+    public ResponseEntity<OutflowAllocationDTO> fullyApplied(@PathVariable("id") String id) throws BusinessException {
+        log.trace("PATCH /outflow-allocation/{}/fully-applied - making full payment of an allocation", id);
+
+        OutflowAllocation outflowAllocation = service.fullyApplied(Long.parseLong(id));
+
+        return ResponseEntity.status(HttpStatus.OK).body(OutflowAllocationMapper.toDTO(outflowAllocation));
     }
 }
