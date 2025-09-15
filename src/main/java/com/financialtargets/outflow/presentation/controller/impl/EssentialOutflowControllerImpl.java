@@ -58,7 +58,7 @@ public class EssentialOutflowControllerImpl implements EssentialOutflowControlle
     @PatchMapping("/{id}")
     @Override
     public ResponseEntity<EssentialOutflowDTO> update(@PathVariable("id") String id, @Valid @RequestBody EssentialOutflowUpdateDTO essentialOutflowUpdateDTO) throws BusinessException, ResourceNotFoundException {
-        log.trace("POST /essential-outflow - Update a essential outflow for id: {}", id);
+        log.trace("PATCH /essential-outflow - Update a essential outflow for id: {}", id);
         log.debug("Request body: {}", essentialOutflowUpdateDTO);
 
         EssentialOutflow essentialOutflow = service.update(Long.valueOf(id), essentialOutflowUpdateDTO);

@@ -1,5 +1,6 @@
 package com.financialtargets.outflow.application.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -8,44 +9,38 @@ import org.hibernate.validator.constraints.Length;
 
 import java.math.BigDecimal;
 
-public record OutflowAllocationCreateDTO(
-        @NotNull
+public record OutflowAllocationUpdateDTO(
         @JsonProperty("name")
         String name,
 
         @Positive
+        @JsonProperty("accountId")
+        Long accountId,
+
+        // TODO: Refactoring
+        @JsonIgnore
+        @Positive
         @JsonProperty("definedPercentage")
         BigDecimal definedPercentage,
 
+        // TODO: Refactoring
+        @JsonIgnore
         @Positive
         @JsonProperty("value")
         BigDecimal value,
 
-        @NotNull
         @Min(0)
         @JsonProperty("appliedValue")
         BigDecimal appliedValue,
 
-        @NotNull
         @JsonProperty("allocationDate")
         String allocationDate,
 
-        @NotNull
         @Length(max = 20)
         @JsonProperty("recurrence")
         String recurrence,
 
         @Length(max = 100)
         @JsonProperty("notes")
-        String notes,
-
-        @NotNull
-        @Positive
-        @JsonProperty("accountId")
-        Long accountId,
-
-        @NotNull
-        @Positive
-        @JsonProperty("userId")
-        Long userId
+        String notes
 ) { }

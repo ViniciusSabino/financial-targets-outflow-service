@@ -2,17 +2,25 @@ package com.financialtargets.outflow.presentation.controller.impl;
 
 import com.financialtargets.outflow.application.dto.OutflowAllocationCreateDTO;
 import com.financialtargets.outflow.application.dto.OutflowAllocationDTO;
+import com.financialtargets.outflow.application.dto.OutflowAllocationUpdateDTO;
 import com.financialtargets.outflow.application.service.OutflowAllocationService;
 import com.financialtargets.outflow.domain.exception.BusinessException;
 import com.financialtargets.outflow.domain.mapper.OutflowAllocationMapper;
 import com.financialtargets.outflow.domain.model.OutflowAllocation;
 import com.financialtargets.outflow.presentation.controller.OutflowAllocationController;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -42,6 +50,17 @@ public class OutflowAllocationControllerImpl implements OutflowAllocationControl
         OutflowAllocation outflowAllocation = service.create(outflowAllocationCreateDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(OutflowAllocationMapper.toDTO(outflowAllocation));
+    }
+
+    @PatchMapping("/{id}")
+    @Override
+    public ResponseEntity<OutflowAllocationDTO> update(@PathVariable("id") String id, @Valid @RequestBody OutflowAllocationUpdateDTO outflowAllocationUpdateDTO) throws Exception {
+        log.trace("PATCH /outflow-allocation - Update a outflow allocation for id: {}", id);
+        log.debug("Request body: {}", outflowAllocationUpdateDTO);
+
+        OutflowAllocation outflowAllocation = service.update(Long.valueOf(id), outflowAllocationUpdateDTO);
+
+        return ResponseEntity.status(HttpStatus.OK).body(OutflowAllocationMapper.toDTO(outflowAllocation));
     }
 
     @PatchMapping("{id}/fully-applied")

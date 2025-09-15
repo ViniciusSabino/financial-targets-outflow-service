@@ -1,12 +1,14 @@
 package com.financialtargets.outflow.domain.model;
 
 import com.financialtargets.outflow.application.dto.OutflowAllocationCreateDTO;
+import com.financialtargets.outflow.application.dto.OutflowAllocationUpdateDTO;
 import com.financialtargets.outflow.application.utils.DateUtil;
 import com.financialtargets.outflow.domain.enums.OutflowRecurrence;
 import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.Objects;
 
 @Data
 public class OutflowAllocation {
@@ -47,6 +49,20 @@ public class OutflowAllocation {
         this.updatedAt = DateUtil.getNowGlobalDate();
 
         this.setAllocationDate(outflowAllocationCreateDTO.allocationDate());
+    }
+
+    public OutflowAllocation(OutflowAllocationUpdateDTO outflowAllocationUpdateDTO) {
+        this.name = outflowAllocationUpdateDTO.name();
+        this.definedPercentage = outflowAllocationUpdateDTO.definedPercentage();
+        this.value = outflowAllocationUpdateDTO.value();
+        this.appliedValue = outflowAllocationUpdateDTO.appliedValue();
+        this.recurrence = OutflowRecurrence.getRecurrenceByText(outflowAllocationUpdateDTO.recurrence());
+        this.notes = outflowAllocationUpdateDTO.notes();
+        this.updatedAt = DateUtil.getNowGlobalDate();
+
+        if(!Objects.isNull(outflowAllocationUpdateDTO.allocationDate())) {
+            this.setAllocationDate(outflowAllocationUpdateDTO.allocationDate());
+        }
     }
 
     public void setAllocationDate(String allocationDate) {

@@ -85,7 +85,7 @@ public class EssentialOutflowEssentialServiceImpl implements EssentialOutflowSer
     @Override
     public EssentialOutflow update(Long id, EssentialOutflowUpdateDTO essentialOutflowUpdateDTO) throws BusinessException, ResourceNotFoundException {
         if (!Objects.isNull(essentialOutflowUpdateDTO.recurrence()) && !OutflowRecurrence.isValidRecurrence(essentialOutflowUpdateDTO.recurrence())) {
-            throw new BusinessException("Invalid recurrence for create a new essential outflow");
+            throw new BusinessException("Invalid recurrence for update a new essential outflow");
         }
 
         EssentialOutflowEntity currentOutflow = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Essential outflow not found"));
@@ -130,6 +130,6 @@ public class EssentialOutflowEssentialServiceImpl implements EssentialOutflowSer
 
         log.info("Outflow updated successfully, id: {}", updatedOutflow.getId());
 
-        return repository.save(currentOutflow).toModel();
+        return updatedOutflow;
     }
 }

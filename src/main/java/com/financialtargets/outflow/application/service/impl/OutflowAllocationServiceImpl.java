@@ -1,11 +1,13 @@
 package com.financialtargets.outflow.application.service.impl;
 
 import com.financialtargets.outflow.application.dto.OutflowAllocationCreateDTO;
+import com.financialtargets.outflow.application.dto.OutflowAllocationUpdateDTO;
 import com.financialtargets.outflow.application.service.OutflowAllocationService;
 import com.financialtargets.outflow.application.service.SummaryService;
 import com.financialtargets.outflow.application.utils.DateUtil;
 import com.financialtargets.outflow.domain.enums.OutflowRecurrence;
 import com.financialtargets.outflow.domain.exception.BusinessException;
+import com.financialtargets.outflow.domain.exception.ResourceNotFoundException;
 import com.financialtargets.outflow.domain.mapper.OutflowAllocationMapper;
 import com.financialtargets.outflow.domain.model.OutflowAllocation;
 import com.financialtargets.outflow.domain.model.OutflowAllocationSummary;
@@ -20,8 +22,6 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Instant;
-import java.time.LocalDate;
-import java.time.Month;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -104,6 +104,36 @@ public class OutflowAllocationServiceImpl implements OutflowAllocationService {
         log.info("Allocation created successfully, id: {}", savedAllocation.getId());
 
         return savedAllocation;
+    }
+
+    @Override
+    public OutflowAllocation update(Long id, OutflowAllocationUpdateDTO outflowAllocationUpdateDTO) throws Exception {
+        if (!Objects.isNull(outflowAllocationUpdateDTO.recurrence()) && !OutflowRecurrence.isValidRecurrence(outflowAllocationUpdateDTO.recurrence()))
+            throw new BusinessException("Invalid recurrence for create a new outflow allocation");
+
+        OutflowAllocationEntity currentOutflow = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Outflow allocation not found"));
+
+        if (Objects.equals(currentOutflow.getName(), outflowAllocationUpdateDTO.name()) && !Objects.equals(currentOutflow.getId(), id)) {
+            throw new BusinessException("There is already an allocation exit with that name");
+        }
+
+        OutflowAllocation allocationUpdate = new OutflowAllocation(outflowAllocationUpdateDTO);
+
+        if(!Objects.isNull(outflowAllocationUpdateDTO.accountId())) {
+            currentOutflow.setAccount(accountRepository.getReferenceById(outflowAllocationUpdateDTO.accountId()));
+        }
+
+        if (!Objects.isNull(allocationUpdate.getName())) currentOutflow.setName(allocationUpdate.getName());
+        if (!Objects.isNull(allocationUpdate.getAppliedValue())) currentOutflow.setAppliedValue(allocationUpdate.getAppliedValue());
+        if (!Objects.isNull(allocationUpdate.getAllocationDate())) currentOutflow.setAllocationDate(allocationUpdate.getAllocationDate());
+        if (!Objects.isNull(allocationUpdate.getNotes())) currentOutflow.setNotes(allocationUpdate.getNotes());
+        if (!Objects.isNull(allocationUpdate.getRecurrence())) currentOutflow.setRecurrence(allocationUpdate.getRecurrence().name());
+
+        OutflowAllocation updatedAllocation = repository.save(currentOutflow).toModel();
+
+        log.info("Allocation updated successfully, id: {}", updatedAllocation.getId());
+
+        return updatedAllocation;
     }
 
     @Override

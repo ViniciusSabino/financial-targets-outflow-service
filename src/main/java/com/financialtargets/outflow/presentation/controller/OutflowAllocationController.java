@@ -1,7 +1,9 @@
 package com.financialtargets.outflow.presentation.controller;
 
+import com.financialtargets.outflow.application.dto.EssentialOutflowDTO;
 import com.financialtargets.outflow.application.dto.OutflowAllocationCreateDTO;
 import com.financialtargets.outflow.application.dto.OutflowAllocationDTO;
+import com.financialtargets.outflow.application.dto.OutflowAllocationUpdateDTO;
 import com.financialtargets.outflow.domain.exception.BusinessException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -52,6 +54,24 @@ public interface OutflowAllocationController {
             }
     )
     ResponseEntity<OutflowAllocationDTO> create(OutflowAllocationCreateDTO outflowAllocationCreateDTO) throws Exception;
+
+    @Operation(summary = "Update a Outflow Allocation",
+            description = "Update a Outflow Allocation",
+            tags = {"OutflowAllocation"},
+            responses = {
+                    @ApiResponse(description = "Success", responseCode = "200", content = {
+                            @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = EssentialOutflowDTO.class)
+                            )
+                    }),
+                    @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
+                    @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
+                    @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
+                    @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)
+            }
+    )
+    ResponseEntity<OutflowAllocationDTO> update(String id, OutflowAllocationUpdateDTO outflowAllocationUpdateDTO) throws Exception;
 
     @Operation(summary = "Making full applied of an allocation",
             description = "Making full applied of an allocation",
