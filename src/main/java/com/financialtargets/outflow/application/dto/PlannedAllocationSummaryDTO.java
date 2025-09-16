@@ -3,10 +3,8 @@ package com.financialtargets.outflow.application.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 
-import java.math.BigDecimal;
-
 @Builder
-public record OutflowAllocationSummaryDTO(
+public record PlannedAllocationSummaryDTO(
         @JsonProperty("totalAmount")
         String totalAmount,
 

@@ -1,7 +1,7 @@
 package com.financialtargets.outflow.presentation.controller;
 
 import com.financialtargets.outflow.application.dto.EssentialOutflowSummaryDTO;
-import com.financialtargets.outflow.application.dto.OutflowAllocationSummaryDTO;
+import com.financialtargets.outflow.application.dto.PlannedAllocationSummaryDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -41,7 +41,7 @@ public interface SummaryController {
                     @ApiResponse(description = "Success", responseCode = "200", content = {
                             @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = OutflowAllocationSummaryDTO.class)
+                                    schema = @Schema(implementation = PlannedAllocationSummaryDTO.class)
                             )
                     }),
                     @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
@@ -50,5 +50,5 @@ public interface SummaryController {
                     @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)
             }
     )
-    ResponseEntity<OutflowAllocationSummaryDTO> getOutflowAllocationSummary(@RequestParam @Valid @NonNull String month, @RequestParam @NonNull @Valid String year) throws Exception;
+    ResponseEntity<PlannedAllocationSummaryDTO> getOutflowAllocationSummary(@RequestParam @Valid @NonNull String month, @RequestParam @NonNull @Valid String year) throws Exception;
 }

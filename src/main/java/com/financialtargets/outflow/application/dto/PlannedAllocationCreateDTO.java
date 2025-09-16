@@ -8,7 +8,7 @@ import org.hibernate.validator.constraints.Length;
 
 import java.math.BigDecimal;
 
-public record OutflowAllocationCreateDTO(
+public record PlannedAllocationCreateDTO(
         @NotNull
         @JsonProperty("name")
         String name,

@@ -1,8 +1,7 @@
 package com.financialtargets.outflow.infrastructure.entity;
 
-import com.financialtargets.outflow.domain.mapper.EssentialOutflowMapper;
-import com.financialtargets.outflow.domain.mapper.OutflowAllocationMapper;
-import com.financialtargets.outflow.domain.model.OutflowAllocation;
+import com.financialtargets.outflow.domain.mapper.PlannedAllocationMapper;
+import com.financialtargets.outflow.domain.model.PlannedAllocation;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,7 +20,7 @@ import java.time.Instant;
 @Entity
 @Data
 @Table(name = "outflow_allocations")
-public class OutflowAllocationEntity {
+public class PlannedAllocationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -64,7 +63,7 @@ public class OutflowAllocationEntity {
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
 
-    public OutflowAllocation toModel() {
-        return OutflowAllocationMapper.toModel(this);
+    public PlannedAllocation toModel() {
+        return PlannedAllocationMapper.toModel(this);
     }
 }

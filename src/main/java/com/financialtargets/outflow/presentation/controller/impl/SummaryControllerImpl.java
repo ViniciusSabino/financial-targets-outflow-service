@@ -1,11 +1,11 @@
 package com.financialtargets.outflow.presentation.controller.impl;
 
 import com.financialtargets.outflow.application.dto.EssentialOutflowSummaryDTO;
-import com.financialtargets.outflow.application.dto.OutflowAllocationSummaryDTO;
+import com.financialtargets.outflow.application.dto.PlannedAllocationSummaryDTO;
 import com.financialtargets.outflow.application.service.SummaryService;
 import com.financialtargets.outflow.domain.mapper.SummaryMapper;
 import com.financialtargets.outflow.domain.model.EssentialOutflowSummary;
-import com.financialtargets.outflow.domain.model.OutflowAllocationSummary;
+import com.financialtargets.outflow.domain.model.PlannedAllocationSummary;
 import com.financialtargets.outflow.presentation.controller.SummaryController;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -36,11 +36,11 @@ public class SummaryControllerImpl implements SummaryController {
 
     @GetMapping("/outflow-allocation")
     @Override
-    public ResponseEntity<OutflowAllocationSummaryDTO> getOutflowAllocationSummary(@NonNull String month, @NonNull String year) throws Exception {
+    public ResponseEntity<PlannedAllocationSummaryDTO> getOutflowAllocationSummary(@NonNull String month, @NonNull String year) throws Exception {
         log.trace("GET /summary/outflow-allocation - Get outflow allocations summary by month: {} and year: {}", month, year);
 
-        OutflowAllocationSummary outflowAllocationSummary = service.getOutflowAllocationSummary(Integer.parseInt(month), Integer.parseInt(year));
+        PlannedAllocationSummary plannedAllocationSummary = service.getPlannedAllocationSummary(Integer.parseInt(month), Integer.parseInt(year));
 
-        return ResponseEntity.status(HttpStatus.OK).body(SummaryMapper.mapAllocationsSummary(outflowAllocationSummary));
+        return ResponseEntity.status(HttpStatus.OK).body(SummaryMapper.mapAllocationsSummary(plannedAllocationSummary));
     }
 }

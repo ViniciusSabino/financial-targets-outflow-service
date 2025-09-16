@@ -1,9 +1,8 @@
 package com.financialtargets.outflow.presentation.controller;
 
-import com.financialtargets.outflow.application.dto.EssentialOutflowDTO;
-import com.financialtargets.outflow.application.dto.OutflowAllocationCreateDTO;
-import com.financialtargets.outflow.application.dto.OutflowAllocationDTO;
-import com.financialtargets.outflow.application.dto.OutflowAllocationUpdateDTO;
+import com.financialtargets.outflow.application.dto.PlannedAllocationUpdateDTO;
+import com.financialtargets.outflow.application.dto.PlannedAllocationCreateDTO;
+import com.financialtargets.outflow.application.dto.PlannedAllocationDTO;
 import com.financialtargets.outflow.domain.exception.BusinessException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -16,17 +15,17 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
-@Tag(name = "OutflowAllocation", description = "Endpoints from Managing Outflow Allocations")
-public interface OutflowAllocationController {
+@Tag(name = "PlannedAllocation", description = "Endpoints from Managing planned allocations")
+public interface PlannedAllocationController {
 
-    @Operation(summary = "List Outflow allocations by month and year parameter",
-            description = "List Outflow allocations by month and year parameter",
-            tags = {"OutflowAllocation"},
+    @Operation(summary = "List planned allocations by month and year parameter",
+            description = "List planned allocations by month and year parameter",
+            tags = {"PlannedAllocation"},
             responses = {
                     @ApiResponse(description = "Success", responseCode = "200", content = {
                             @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    array = @ArraySchema(schema = @Schema(implementation = OutflowAllocationDTO.class))
+                                    array = @ArraySchema(schema = @Schema(implementation = PlannedAllocationDTO.class))
                             )
                     }),
                     @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
@@ -35,16 +34,16 @@ public interface OutflowAllocationController {
                     @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)
             }
     )
-    ResponseEntity<List<OutflowAllocationDTO>> listByMonth(String month, String year) throws Exception;
+    ResponseEntity<List<PlannedAllocationDTO>> listByMonth(String month, String year) throws Exception;
 
-    @Operation(summary = "Create a Outflow Allocation",
-            description = "Create a Outflow Allocation",
-            tags = {"OutflowAllocation"},
+    @Operation(summary = "Create a planned allocation",
+            description = "Create a planned allocation",
+            tags = {"PlannedAllocation"},
             responses = {
                     @ApiResponse(description = "Created", responseCode = "201", content = {
                             @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = OutflowAllocationDTO.class)
+                                    schema = @Schema(implementation = PlannedAllocationDTO.class)
                             )
                     }),
                     @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
@@ -53,16 +52,16 @@ public interface OutflowAllocationController {
                     @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)
             }
     )
-    ResponseEntity<OutflowAllocationDTO> create(OutflowAllocationCreateDTO outflowAllocationCreateDTO) throws Exception;
+    ResponseEntity<PlannedAllocationDTO> create(PlannedAllocationCreateDTO PlannedAllocationCreateDTO) throws Exception;
 
-    @Operation(summary = "Update a Outflow Allocation",
-            description = "Update a Outflow Allocation",
-            tags = {"OutflowAllocation"},
+    @Operation(summary = "Update a planned allocation",
+            description = "Update a planned allocation",
+            tags = {"PlannedAllocation"},
             responses = {
                     @ApiResponse(description = "Success", responseCode = "200", content = {
                             @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = EssentialOutflowDTO.class)
+                                    schema = @Schema(implementation = PlannedAllocationUpdateDTO.class)
                             )
                     }),
                     @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
@@ -71,16 +70,16 @@ public interface OutflowAllocationController {
                     @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)
             }
     )
-    ResponseEntity<OutflowAllocationDTO> update(String id, OutflowAllocationUpdateDTO outflowAllocationUpdateDTO) throws Exception;
+    ResponseEntity<PlannedAllocationDTO> update(String id, PlannedAllocationUpdateDTO PlannedAllocationUpdateDTO) throws Exception;
 
     @Operation(summary = "Making full applied of an allocation",
             description = "Making full applied of an allocation",
-            tags = {"OutflowAllocation"},
+            tags = {"PlannedAllocation"},
             responses = {
                     @ApiResponse(description = "Success", responseCode = "200", content = {
                             @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = OutflowAllocationDTO.class)
+                                    schema = @Schema(implementation = PlannedAllocationDTO.class)
                             )
                     }),
                     @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
@@ -89,5 +88,5 @@ public interface OutflowAllocationController {
                     @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)
             }
     )
-    ResponseEntity<OutflowAllocationDTO> fullyApplied(String id) throws BusinessException;
+    ResponseEntity<PlannedAllocationDTO> fullyApplied(String id) throws BusinessException;
 }

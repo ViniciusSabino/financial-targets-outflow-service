@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Builder
 @Data
-public class OutflowAllocationDTO {
+public class PlannedAllocationDTO {
     @JsonProperty("id")
     private Long id;
 

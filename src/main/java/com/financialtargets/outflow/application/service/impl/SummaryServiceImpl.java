@@ -2,16 +2,14 @@ package com.financialtargets.outflow.application.service.impl;
 
 import com.financialtargets.outflow.application.dto.IncomesSummaryDTO;
 import com.financialtargets.outflow.application.service.EssentialOutflowService;
-import com.financialtargets.outflow.application.service.OutflowAllocationService;
 import com.financialtargets.outflow.application.service.SummaryService;
 import com.financialtargets.outflow.application.utils.DateUtil;
 import com.financialtargets.outflow.domain.model.EssentialOutflow;
 import com.financialtargets.outflow.domain.model.EssentialOutflowSummary;
-import com.financialtargets.outflow.domain.model.OutflowAllocation;
-import com.financialtargets.outflow.domain.model.OutflowAllocationSummary;
+import com.financialtargets.outflow.domain.model.PlannedAllocationSummary;
 import com.financialtargets.outflow.infrastructure.client.IncomesClient;
-import com.financialtargets.outflow.infrastructure.entity.OutflowAllocationEntity;
-import com.financialtargets.outflow.infrastructure.repository.OutflowAllocationRepository;
+import com.financialtargets.outflow.infrastructure.entity.PlannedAllocationEntity;
+import com.financialtargets.outflow.infrastructure.repository.PlannedAllocationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,7 +25,7 @@ import java.util.List;
 public class SummaryServiceImpl implements SummaryService {
     private final EssentialOutflowService essentialOutflowService;
 
-    private final OutflowAllocationRepository outflowAllocationRepository;
+    private final PlannedAllocationRepository plannedAllocationRepository;
 
     private final IncomesClient incomesClient;
 
@@ -59,28 +57,28 @@ public class SummaryServiceImpl implements SummaryService {
     }
 
     @Override
-    public OutflowAllocationSummary getOutflowAllocationSummary(Integer month, Integer year) throws Exception {
+    public PlannedAllocationSummary getPlannedAllocationSummary(Integer month, Integer year) throws Exception {
         Instant start = DateUtil.getStartDateByFilter(month, year);
         Instant end = DateUtil.getEndDateByFilter(month, year);
 
         EssentialOutflowSummary essentialOutflowSummary = this.getEssentialOutflowSummary(month, year);
 
-        List<OutflowAllocationEntity> allocations = outflowAllocationRepository.findByAllocationDateBetween(start, end);
+        List<PlannedAllocationEntity> allocations = plannedAllocationRepository.findByAllocationDateBetween(start, end);
 
-        OutflowAllocationSummary outflowAllocationSummary = new OutflowAllocationSummary();
+        PlannedAllocationSummary plannedAllocationSummary = new PlannedAllocationSummary();
 
         BigDecimal totalAmountProcessed = allocations.stream().reduce(new BigDecimal(0), (total, outflow) -> outflow.getAppliedValue().add(total), BigDecimal::add);
         BigDecimal percentageCurrentlyReserved = allocations.stream().reduce(new BigDecimal(0), (total, outflow) -> outflow.getDefinedPercentage().add(total), BigDecimal::add);
 
-        outflowAllocationSummary.setTotalIncomesReceived(essentialOutflowSummary.getTotalIncomesReceived());
-        outflowAllocationSummary.setTotalAmount(essentialOutflowSummary.getTotalIncomesReceived().subtract(essentialOutflowSummary.getTotalAmount()));
-        outflowAllocationSummary.setTotalAmountProcessed(totalAmountProcessed);
-        outflowAllocationSummary.setTotalAmountRemaining(outflowAllocationSummary.getTotalAmount().subtract(totalAmountProcessed));
-        outflowAllocationSummary.setPercentageOfIncomes(new BigDecimal(100).subtract(essentialOutflowSummary.getPercentageOfIncomes()));
-        outflowAllocationSummary.setNumberOfAllocations(allocations.size());
-        outflowAllocationSummary.setPercentageCurrentlyReserved(percentageCurrentlyReserved);
-        outflowAllocationSummary.setRemainingPercentage(new BigDecimal(100).subtract(percentageCurrentlyReserved));
+        plannedAllocationSummary.setTotalIncomesReceived(essentialOutflowSummary.getTotalIncomesReceived());
+        plannedAllocationSummary.setTotalAmount(essentialOutflowSummary.getTotalIncomesReceived().subtract(essentialOutflowSummary.getTotalAmount()));
+        plannedAllocationSummary.setTotalAmountProcessed(totalAmountProcessed);
+        plannedAllocationSummary.setTotalAmountRemaining(plannedAllocationSummary.getTotalAmount().subtract(totalAmountProcessed));
+        plannedAllocationSummary.setPercentageOfIncomes(new BigDecimal(100).subtract(essentialOutflowSummary.getPercentageOfIncomes()));
+        plannedAllocationSummary.setNumberOfAllocations(allocations.size());
+        plannedAllocationSummary.setPercentageCurrentlyReserved(percentageCurrentlyReserved);
+        plannedAllocationSummary.setRemainingPercentage(new BigDecimal(100).subtract(percentageCurrentlyReserved));
 
-        return outflowAllocationSummary;
+        return plannedAllocationSummary;
     }
 }
