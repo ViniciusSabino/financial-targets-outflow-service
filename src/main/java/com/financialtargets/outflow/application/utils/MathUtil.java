@@ -7,7 +7,6 @@ import java.math.RoundingMode;
 
 @UtilityClass
 public class MathUtil {
-
     public String toSimplePercentageFormat(BigDecimal value) {
         return value + "%";
     }

@@ -31,7 +31,7 @@ public class PlannedAllocationEntity {
 
     @ManyToOne
     @JoinColumn(name = "account_id", nullable = false)
-    private AccountEntity account;
+    private AccountsEntity account;
 
     @Column(name = "name", nullable = false, unique = true)
     private String name;

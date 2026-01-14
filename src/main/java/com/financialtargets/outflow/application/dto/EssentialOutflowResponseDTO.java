@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Builder
 @Data
-public class EssentialOutflowDTO {
+public class EssentialOutflowResponseDTO {
     @JsonProperty("id")
     private Long id;
 

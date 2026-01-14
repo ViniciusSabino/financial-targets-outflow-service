@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 
 
 @Builder
-public record IncomesSummaryDTO(
+public record IncomesSummaryResponseDTO(
         @JsonProperty("totalExpected")
         String totalExpected,
 

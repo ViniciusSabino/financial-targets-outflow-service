@@ -1,7 +1,7 @@
 package com.financialtargets.outflow.presentation.controller.impl;
 
-import com.financialtargets.outflow.application.dto.EssentialOutflowSummaryDTO;
-import com.financialtargets.outflow.application.dto.PlannedAllocationSummaryDTO;
+import com.financialtargets.outflow.application.dto.EssentialOutflowSummaryResponseDTO;
+import com.financialtargets.outflow.application.dto.PlannedAllocationSummaryResponseDTO;
 import com.financialtargets.outflow.application.service.SummaryService;
 import com.financialtargets.outflow.domain.mapper.SummaryMapper;
 import com.financialtargets.outflow.domain.model.EssentialOutflowSummary;
@@ -26,7 +26,7 @@ public class SummaryControllerImpl implements SummaryController {
 
     @GetMapping("/essential-outflow")
     @Override
-    public ResponseEntity<EssentialOutflowSummaryDTO> getEssentialOutflowSummary(@NonNull String month, @NonNull String year) throws Exception {
+    public ResponseEntity<EssentialOutflowSummaryResponseDTO> getEssentialOutflowSummary(@NonNull String month, @NonNull String year) throws Exception {
         log.trace("GET /summary/essential-outflow - Get essential outflows summary by month: {} and year: {}", month, year);
 
         EssentialOutflowSummary essentialOutflowSummary = service.getEssentialOutflowSummary(Integer.parseInt(month), Integer.parseInt(year));
@@ -36,7 +36,7 @@ public class SummaryControllerImpl implements SummaryController {
 
     @GetMapping("/outflow-allocation")
     @Override
-    public ResponseEntity<PlannedAllocationSummaryDTO> getOutflowAllocationSummary(@NonNull String month, @NonNull String year) throws Exception {
+    public ResponseEntity<PlannedAllocationSummaryResponseDTO> getOutflowAllocationSummary(@NonNull String month, @NonNull String year) throws Exception {
         log.trace("GET /summary/outflow-allocation - Get outflow allocations summary by month: {} and year: {}", month, year);
 
         PlannedAllocationSummary plannedAllocationSummary = service.getPlannedAllocationSummary(Integer.parseInt(month), Integer.parseInt(year));

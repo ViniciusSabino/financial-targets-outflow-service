@@ -45,6 +45,10 @@ public class EssentialOutflow {
         this.createdAt = DateUtil.getNowGlobalDate();
         this.updatedAt = DateUtil.getNowGlobalDate();
 
+        if (essentialOutflowCreateDTO.paidValue().compareTo(essentialOutflowCreateDTO.value()) >= 0) {
+            this.paidValue = essentialOutflowCreateDTO.value();
+        }
+
         this.setDueDate(essentialOutflowCreateDTO.dueDate());
     }
 

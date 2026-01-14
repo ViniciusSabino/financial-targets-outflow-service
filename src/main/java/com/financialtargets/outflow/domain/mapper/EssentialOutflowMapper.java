@@ -1,6 +1,6 @@
 package com.financialtargets.outflow.domain.mapper;
 
-import com.financialtargets.outflow.application.dto.EssentialOutflowDTO;
+import com.financialtargets.outflow.application.dto.EssentialOutflowResponseDTO;
 import com.financialtargets.outflow.application.utils.AmountUtil;
 import com.financialtargets.outflow.application.utils.DateUtil;
 import com.financialtargets.outflow.domain.enums.OutflowRecurrence;
@@ -35,8 +35,8 @@ public class EssentialOutflowMapper {
         return entities.stream().map(EssentialOutflowMapper::toModel).toList();
     }
 
-    public EssentialOutflowDTO toDTO(EssentialOutflow essentialOutflow) {
-        return EssentialOutflowDTO.builder()
+    public EssentialOutflowResponseDTO toResponse(EssentialOutflow essentialOutflow) {
+        return EssentialOutflowResponseDTO.builder()
                 .id(essentialOutflow.getId())
                 .name(essentialOutflow.getName())
                 .value(AmountUtil.formatAmount(essentialOutflow.getValue()))
@@ -51,7 +51,7 @@ public class EssentialOutflowMapper {
                 .build();
     }
 
-    public List<EssentialOutflowDTO> toDTOList(List<EssentialOutflow> essentialsOutflow) {
-        return essentialsOutflow.stream().map(EssentialOutflowMapper::toDTO).toList();
+    public List<EssentialOutflowResponseDTO> toResponseList(List<EssentialOutflow> essentialsOutflow) {
+        return essentialsOutflow.stream().map(EssentialOutflowMapper::toResponse).toList();
     }
 }

@@ -10,9 +10,9 @@ import com.financialtargets.outflow.domain.exception.ResourceNotFoundException;
 import com.financialtargets.outflow.domain.mapper.EssentialOutflowMapper;
 import com.financialtargets.outflow.domain.model.EssentialOutflow;
 import com.financialtargets.outflow.infrastructure.entity.EssentialOutflowEntity;
-import com.financialtargets.outflow.infrastructure.repository.AccountRepository;
+import com.financialtargets.outflow.infrastructure.repository.AccountsRepository;
 import com.financialtargets.outflow.infrastructure.repository.EssentialOutflowRepository;
-import com.financialtargets.outflow.infrastructure.repository.UserRepository;
+import com.financialtargets.outflow.infrastructure.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,11 +25,11 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class EssentialOutflowEssentialServiceImpl implements EssentialOutflowService {
+public class EssentialOutflowServiceImpl implements EssentialOutflowService {
 
     private final EssentialOutflowRepository repository;
-    private final UserRepository userRepository;
-    private final AccountRepository accountRepository;
+    private final UsersRepository usersRepository;
+    private final AccountsRepository accountsRepository;
 
     @Override
     public List<EssentialOutflow> listByMonth(Integer month, Integer year) throws Exception {
@@ -38,9 +38,9 @@ public class EssentialOutflowEssentialServiceImpl implements EssentialOutflowSer
 
         log.info("Listing essential outflows for the period {} to {}", start, end);
 
-        List<EssentialOutflowEntity> outflows = repository.findByDueDateBetween(start, end).stream().toList();
+        List<EssentialOutflowEntity> outflows = repository.findByDueDateBetween(start, end);
 
-        log.info("Listed {} essential outflows successfully", outflows.stream().toList().size());
+        log.info("Listed {} essential outflows successfully", outflows.size());
 
         return EssentialOutflowMapper.toModelList(outflows);
     }
@@ -57,14 +57,7 @@ public class EssentialOutflowEssentialServiceImpl implements EssentialOutflowSer
 
         EssentialOutflow essentialOutflow = new EssentialOutflow(essentialOutflowCreateDTO);
 
-        if (essentialOutflowCreateDTO.paidValue().compareTo(essentialOutflowCreateDTO.value()) >= 0) {
-            essentialOutflow.setPaidValue(essentialOutflowCreateDTO.value());
-        }
-
         EssentialOutflowEntity entity = new EssentialOutflowEntity();
-
-        entity.setUser(userRepository.getReferenceById(essentialOutflowCreateDTO.userId()));
-        entity.setAccount(accountRepository.getReferenceById(essentialOutflowCreateDTO.accountId()));
 
         entity.setName(essentialOutflow.getName());
         entity.setDueDate(essentialOutflow.getDueDate());
@@ -74,6 +67,9 @@ public class EssentialOutflowEssentialServiceImpl implements EssentialOutflowSer
         entity.setRecurrence(essentialOutflow.getRecurrence().name());
         entity.setCreatedAt(essentialOutflow.getCreatedAt());
         entity.setUpdatedAt(essentialOutflow.getUpdatedAt());
+
+        entity.setUser(usersRepository.getReferenceById(essentialOutflowCreateDTO.userId()));
+        entity.setAccount(accountsRepository.getReferenceById(essentialOutflowCreateDTO.accountId()));
 
         EssentialOutflow savedOutflow = repository.save(entity).toModel();
 
@@ -118,7 +114,7 @@ public class EssentialOutflowEssentialServiceImpl implements EssentialOutflowSer
         }
 
         if (!Objects.isNull(essentialOutflowUpdateDTO.accountId()))
-            currentOutflow.setAccount(accountRepository.getReferenceById(essentialOutflowUpdateDTO.accountId()));
+            currentOutflow.setAccount(accountsRepository.getReferenceById(essentialOutflowUpdateDTO.accountId()));
 
         if (!Objects.isNull(essentialOutflowUpdate.getName())) currentOutflow.setName(essentialOutflowUpdate.getName());
         if (!Objects.isNull(essentialOutflowUpdate.getValue())) currentOutflow.setValue(essentialOutflowUpdate.getValue());

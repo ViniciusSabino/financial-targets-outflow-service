@@ -1,10 +1,11 @@
 package com.financialtargets.outflow.presentation.controller;
 
 import com.financialtargets.outflow.application.dto.EssentialOutflowCreateDTO;
-import com.financialtargets.outflow.application.dto.EssentialOutflowDTO;
+import com.financialtargets.outflow.application.dto.EssentialOutflowResponseDTO;
 import com.financialtargets.outflow.application.dto.EssentialOutflowUpdateDTO;
 import com.financialtargets.outflow.domain.exception.BusinessException;
 import com.financialtargets.outflow.domain.exception.ResourceNotFoundException;
+import com.financialtargets.outflow.presentation.exception.ExceptionResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -26,16 +27,36 @@ public interface EssentialOutflowController {
                     @ApiResponse(description = "Success", responseCode = "200", content = {
                             @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    array = @ArraySchema(schema = @Schema(implementation = EssentialOutflowDTO.class))
+                                    array = @ArraySchema(schema = @Schema(implementation = EssentialOutflowResponseDTO.class))
                             )
                     }),
-                    @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
-                    @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
-                    @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
-                    @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)
+                    @ApiResponse(description = "Bad Request", responseCode = "400", content = {
+                            @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ExceptionResponse.class)
+                            )
+                    }),
+                    @ApiResponse(description = "Unauthorized", responseCode = "401", content = {
+                            @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ExceptionResponse.class)
+                            )
+                    }),
+                    @ApiResponse(description = "Not Found", responseCode = "404", content = {
+                            @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ExceptionResponse.class)
+                            )
+                    }),
+                    @ApiResponse(description = "Internal Server Error", responseCode = "500", content = {
+                            @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ExceptionResponse.class)
+                            )
+                    })
             }
     )
-    ResponseEntity<List<EssentialOutflowDTO>> listByMonth(String month, String year) throws Exception;
+    ResponseEntity<List<EssentialOutflowResponseDTO>> listByMonth(String month, String year) throws Exception;
 
     @Operation(summary = "Create a Essential Outflow",
             description = "Create a Essential Outflow",
@@ -44,16 +65,36 @@ public interface EssentialOutflowController {
                     @ApiResponse(description = "Created", responseCode = "201", content = {
                             @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = EssentialOutflowDTO.class)
+                                    schema = @Schema(implementation = EssentialOutflowResponseDTO.class)
                             )
                     }),
-                    @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
-                    @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
-                    @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
-                    @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)
+                    @ApiResponse(description = "Bad Request", responseCode = "400", content = {
+                            @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ExceptionResponse.class)
+                            )
+                    }),
+                    @ApiResponse(description = "Unauthorized", responseCode = "401", content = {
+                            @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ExceptionResponse.class)
+                            )
+                    }),
+                    @ApiResponse(description = "Not Found", responseCode = "404", content = {
+                            @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ExceptionResponse.class)
+                            )
+                    }),
+                    @ApiResponse(description = "Internal Server Error", responseCode = "500", content = {
+                            @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ExceptionResponse.class)
+                            )
+                    })
             }
     )
-    ResponseEntity<EssentialOutflowDTO> create(EssentialOutflowCreateDTO essentialOutflowCreateDTO) throws BusinessException;
+    ResponseEntity<EssentialOutflowResponseDTO> create(EssentialOutflowCreateDTO essentialOutflowCreateDTO) throws BusinessException;
 
     @Operation(summary = "Update a Essential Outflow",
             description = "Update a Essential Outflow",
@@ -62,14 +103,34 @@ public interface EssentialOutflowController {
                     @ApiResponse(description = "Success", responseCode = "200", content = {
                             @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = EssentialOutflowDTO.class)
+                                    schema = @Schema(implementation = EssentialOutflowResponseDTO.class)
                             )
                     }),
-                    @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
-                    @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
-                    @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
-                    @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)
+                    @ApiResponse(description = "Bad Request", responseCode = "400", content = {
+                            @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ExceptionResponse.class)
+                            )
+                    }),
+                    @ApiResponse(description = "Unauthorized", responseCode = "401", content = {
+                            @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ExceptionResponse.class)
+                            )
+                    }),
+                    @ApiResponse(description = "Not Found", responseCode = "404", content = {
+                            @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ExceptionResponse.class)
+                            )
+                    }),
+                    @ApiResponse(description = "Internal Server Error", responseCode = "500", content = {
+                            @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ExceptionResponse.class)
+                            )
+                    })
             }
     )
-    ResponseEntity<EssentialOutflowDTO> update(String id, EssentialOutflowUpdateDTO essentialOutflowUpdateDTO) throws BusinessException, ResourceNotFoundException;
+    ResponseEntity<EssentialOutflowResponseDTO> update(String id, EssentialOutflowUpdateDTO essentialOutflowUpdateDTO) throws BusinessException, ResourceNotFoundException;
 }

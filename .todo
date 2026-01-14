@@ -1,2 +1,2 @@
 - POST Essential Outflow: Caso a saida essencial seja de outro mês entao permitir o cadastro com o mesmo nome
-- POST criar um rota post que calcule as alocacoes planejadas fixas (ASSINATURAS E MENSALIDADES, COMPRAS PARCELADAS) e crie os registros no br mensalmente caso nao exista (no momento mockar os valores)
+- Verificar possibilidade de integrar modelos Account, User aos demais modelos (Composição)

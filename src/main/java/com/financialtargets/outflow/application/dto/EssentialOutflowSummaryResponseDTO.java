@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 
 @Builder
-public record PlannedAllocationSummaryDTO(
+public record EssentialOutflowSummaryResponseDTO(
         @JsonProperty("totalAmount")
         String totalAmount,
 
@@ -15,14 +15,5 @@ public record PlannedAllocationSummaryDTO(
         String totalAmountRemaining,
 
         @JsonProperty("percentageOfIncomes")
-        String percentageOfIncomes,
-
-        @JsonProperty("numberOfAllocations")
-        Integer numberOfAllocations,
-
-        @JsonProperty("percentageCurrentlyReserved")
-        String percentageCurrentlyReserved,
-
-        @JsonProperty("remainingPercentage")
-        String remainingPercentage
+        String percentageOfIncomes
 ) { }

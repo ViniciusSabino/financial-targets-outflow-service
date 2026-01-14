@@ -1,6 +1,6 @@
 package com.financialtargets.outflow.domain.mapper;
 
-import com.financialtargets.outflow.application.dto.PlannedAllocationDTO;
+import com.financialtargets.outflow.application.dto.PlannedAllocationResponseDTO;
 import com.financialtargets.outflow.application.utils.AmountUtil;
 import com.financialtargets.outflow.application.utils.DateUtil;
 import com.financialtargets.outflow.application.utils.MathUtil;
@@ -36,8 +36,8 @@ public class PlannedAllocationMapper {
         return entities.stream().map(PlannedAllocationMapper::toModel).toList();
     }
 
-    public PlannedAllocationDTO toDTO(PlannedAllocation plannedAllocation) {
-        return PlannedAllocationDTO.builder()
+    public PlannedAllocationResponseDTO toDTO(PlannedAllocation plannedAllocation) {
+        return PlannedAllocationResponseDTO.builder()
                 .id(plannedAllocation.getId())
                 .name(plannedAllocation.getName())
                 .accountName(plannedAllocation.getAccountName())
@@ -53,7 +53,7 @@ public class PlannedAllocationMapper {
                 .build();
     }
 
-    public List<PlannedAllocationDTO> toDTOList(List<PlannedAllocation> plannedAllocations) {
+    public List<PlannedAllocationResponseDTO> toDTOList(List<PlannedAllocation> plannedAllocations) {
         return plannedAllocations.stream().map(PlannedAllocationMapper::toDTO).toList();
     }
 }

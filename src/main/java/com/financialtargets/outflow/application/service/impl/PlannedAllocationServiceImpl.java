@@ -12,9 +12,9 @@ import com.financialtargets.outflow.domain.mapper.PlannedAllocationMapper;
 import com.financialtargets.outflow.domain.model.PlannedAllocation;
 import com.financialtargets.outflow.domain.model.PlannedAllocationSummary;
 import com.financialtargets.outflow.infrastructure.entity.PlannedAllocationEntity;
-import com.financialtargets.outflow.infrastructure.repository.AccountRepository;
+import com.financialtargets.outflow.infrastructure.repository.AccountsRepository;
 import com.financialtargets.outflow.infrastructure.repository.PlannedAllocationRepository;
-import com.financialtargets.outflow.infrastructure.repository.UserRepository;
+import com.financialtargets.outflow.infrastructure.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,8 +32,8 @@ import java.util.Optional;
 public class PlannedAllocationServiceImpl implements PlannedAllocationService {
 
     private final PlannedAllocationRepository repository;
-    private final UserRepository userRepository;
-    private final AccountRepository accountRepository;
+    private final UsersRepository usersRepository;
+    private final AccountsRepository accountsRepository;
 
     private final SummaryService summaryService;
 
@@ -44,9 +44,9 @@ public class PlannedAllocationServiceImpl implements PlannedAllocationService {
 
         log.info("Listing planned allocations for the period {} to {}", start, end);
 
-        List<PlannedAllocationEntity> outflows = repository.findByAllocationDateBetween(start, end).stream().toList();
+        List<PlannedAllocationEntity> outflows = repository.findByAllocationDateBetween(start, end);
 
-        log.info("Listed {} planned allocations successfully", outflows.stream().toList().size());
+        log.info("Listed {} planned allocations successfully", outflows.size());
 
         return PlannedAllocationMapper.toModelList(outflows);
     }
@@ -86,8 +86,8 @@ public class PlannedAllocationServiceImpl implements PlannedAllocationService {
 
         PlannedAllocationEntity entity = new PlannedAllocationEntity();
 
-        entity.setUser(userRepository.getReferenceById(plannedAllocationCreateDTO.userId()));
-        entity.setAccount(accountRepository.getReferenceById(plannedAllocationCreateDTO.accountId()));
+        entity.setUser(usersRepository.getReferenceById(plannedAllocationCreateDTO.userId()));
+        entity.setAccount(accountsRepository.getReferenceById(plannedAllocationCreateDTO.accountId()));
 
         entity.setName(plannedAllocation.getName());
         entity.setDefinedPercentage(plannedAllocation.getDefinedPercentage());
@@ -120,7 +120,7 @@ public class PlannedAllocationServiceImpl implements PlannedAllocationService {
         PlannedAllocation allocationUpdate = new PlannedAllocation(plannedAllocationUpdateDTO);
 
         if(!Objects.isNull(plannedAllocationUpdateDTO.accountId())) {
-            currentOutflow.setAccount(accountRepository.getReferenceById(plannedAllocationUpdateDTO.accountId()));
+            currentOutflow.setAccount(accountsRepository.getReferenceById(plannedAllocationUpdateDTO.accountId()));
         }
 
         if (!Objects.isNull(allocationUpdate.getName())) currentOutflow.setName(allocationUpdate.getName());

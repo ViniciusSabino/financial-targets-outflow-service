@@ -1,6 +1,6 @@
 package com.financialtargets.outflow.application.service.impl;
 
-import com.financialtargets.outflow.application.dto.IncomesSummaryDTO;
+import com.financialtargets.outflow.application.dto.IncomesSummaryResponseDTO;
 import com.financialtargets.outflow.application.service.EssentialOutflowService;
 import com.financialtargets.outflow.application.service.SummaryService;
 import com.financialtargets.outflow.application.utils.DateUtil;
@@ -33,9 +33,9 @@ public class SummaryServiceImpl implements SummaryService {
     public EssentialOutflowSummary getEssentialOutflowSummary(Integer month, Integer year) throws Exception {
         List<EssentialOutflow> essentialsOutflows = essentialOutflowService.listByMonth(month, year);
 
-        log.info("Listed {} essential outflows successfully from database", essentialsOutflows.stream().toList().size());
+        log.info("Listed {} essential outflows successfully from database", essentialsOutflows.size());
 
-        IncomesSummaryDTO incomesSummary = incomesClient.getIncomesSummary(month.toString(), year.toString());
+        IncomesSummaryResponseDTO incomesSummary = incomesClient.getIncomesSummary(month.toString(), year.toString());
 
         log.info("Get Incomes summary successfully from incomes service");
 

@@ -1,7 +1,7 @@
 package com.financialtargets.outflow.presentation.controller.impl;
 
 import com.financialtargets.outflow.application.dto.EssentialOutflowCreateDTO;
-import com.financialtargets.outflow.application.dto.EssentialOutflowDTO;
+import com.financialtargets.outflow.application.dto.EssentialOutflowResponseDTO;
 import com.financialtargets.outflow.application.dto.EssentialOutflowUpdateDTO;
 import com.financialtargets.outflow.application.service.EssentialOutflowService;
 import com.financialtargets.outflow.domain.exception.BusinessException;
@@ -36,33 +36,33 @@ public class EssentialOutflowControllerImpl implements EssentialOutflowControlle
 
     @GetMapping
     @Override
-    public ResponseEntity<List<EssentialOutflowDTO>> listByMonth(@RequestParam @Valid @NonNull String month, @RequestParam @NonNull @Valid String year) throws Exception {
+    public ResponseEntity<List<EssentialOutflowResponseDTO>> listByMonth(@RequestParam @Valid @NonNull String month, @RequestParam @Valid @NonNull String year) throws Exception {
         log.trace("GET /essential-outflow - List essential outflows by month: {} and year: {}", month, year);
 
         List<EssentialOutflow> essentialsOutflow = service.listByMonth(Integer.parseInt(month), Integer.parseInt(year));
 
-        return ResponseEntity.status(HttpStatus.OK).body(EssentialOutflowMapper.toDTOList(essentialsOutflow));
+        return ResponseEntity.status(HttpStatus.OK).body(EssentialOutflowMapper.toResponseList(essentialsOutflow));
     }
 
     @PostMapping
     @Override
-    public ResponseEntity<EssentialOutflowDTO> create(@Valid @RequestBody EssentialOutflowCreateDTO essentialOutflowCreateDTO) throws BusinessException {
+    public ResponseEntity<EssentialOutflowResponseDTO> create(@Valid @RequestBody EssentialOutflowCreateDTO essentialOutflowCreateDTO) throws BusinessException {
         log.trace("POST /essential-outflow - Creating a new essential outflow for user {}", essentialOutflowCreateDTO.userId());
         log.debug("Request body: {}", essentialOutflowCreateDTO);
 
         EssentialOutflow essentialOutflow = service.create(essentialOutflowCreateDTO);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(EssentialOutflowMapper.toDTO(essentialOutflow));
+        return ResponseEntity.status(HttpStatus.CREATED).body(EssentialOutflowMapper.toResponse(essentialOutflow));
     }
 
     @PatchMapping("/{id}")
     @Override
-    public ResponseEntity<EssentialOutflowDTO> update(@PathVariable("id") String id, @Valid @RequestBody EssentialOutflowUpdateDTO essentialOutflowUpdateDTO) throws BusinessException, ResourceNotFoundException {
+    public ResponseEntity<EssentialOutflowResponseDTO> update(@PathVariable("id") String id, @Valid @RequestBody EssentialOutflowUpdateDTO essentialOutflowUpdateDTO) throws BusinessException, ResourceNotFoundException {
         log.trace("PATCH /essential-outflow - Update a essential outflow for id: {}", id);
         log.debug("Request body: {}", essentialOutflowUpdateDTO);
 
         EssentialOutflow essentialOutflow = service.update(Long.valueOf(id), essentialOutflowUpdateDTO);
 
-        return ResponseEntity.status(HttpStatus.OK).body(EssentialOutflowMapper.toDTO(essentialOutflow));
+        return ResponseEntity.status(HttpStatus.OK).body(EssentialOutflowMapper.toResponse(essentialOutflow));
     }
 }

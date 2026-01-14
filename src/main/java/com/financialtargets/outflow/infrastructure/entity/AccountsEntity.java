@@ -17,8 +17,8 @@ import java.time.Instant;
 
 @Entity
 @Data
-@Table(name = "account")
-public class AccountEntity {
+@Table(name = "accounts")
+public class AccountsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
