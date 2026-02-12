@@ -1,12 +1,11 @@
 package com.financialtargets.outflow.presentation.controller.impl;
 
-import com.financialtargets.outflow.application.dto.PlannedAllocationCreateDTO;
-import com.financialtargets.outflow.application.dto.PlannedAllocationResponseDTO;
-import com.financialtargets.outflow.application.dto.PlannedAllocationUpdateDTO;
-import com.financialtargets.outflow.application.service.PlannedAllocationService;
-import com.financialtargets.outflow.domain.exception.BusinessException;
-import com.financialtargets.outflow.domain.mapper.PlannedAllocationMapper;
-import com.financialtargets.outflow.domain.model.PlannedAllocation;
+import com.financialtargets.outflow.application.dto.allocation.PlannedAllocationCreateDTO;
+import com.financialtargets.outflow.application.dto.allocation.PlannedAllocationResponseDTO;
+import com.financialtargets.outflow.application.dto.allocation.PlannedAllocationUpdateDTO;
+import com.financialtargets.outflow.application.usecase.allocation.CreatePlannedAllocationUseCase;
+import com.financialtargets.outflow.application.usecase.allocation.ListingPlannedAllocationUseCase;
+import com.financialtargets.outflow.application.usecase.allocation.UpdatePlannedAllocationUseCase;
 import com.financialtargets.outflow.presentation.controller.PlannedAllocationController;
 import jakarta.validation.Valid;
 import lombok.NonNull;
@@ -31,27 +30,30 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class PlannedAllocationControllerImpl implements PlannedAllocationController {
-    private final PlannedAllocationService service;
+
+    private final CreatePlannedAllocationUseCase createCase;
+    private final ListingPlannedAllocationUseCase listingCase;
+    private final UpdatePlannedAllocationUseCase updateCase;
 
     @GetMapping
     @Override
     public ResponseEntity<List<PlannedAllocationResponseDTO>> listByMonth(@RequestParam @Valid @NonNull String month, @RequestParam @Valid @NonNull String year) throws Exception {
         log.trace("GET /planned-allocation - List planned allocations by month: {} and year: {}", month, year);
 
-        List<PlannedAllocation> plannedAllocations = service.listByMonth(Integer.parseInt(month), Integer.parseInt(year));
+        List<PlannedAllocationResponseDTO> allocations = listingCase.byPeriod(month, year);
 
-        return ResponseEntity.status(HttpStatus.OK).body(PlannedAllocationMapper.toDTOList(plannedAllocations));
+        return ResponseEntity.status(HttpStatus.OK).body(allocations);
     }
 
     @PostMapping
     @Override
-    public ResponseEntity<PlannedAllocationResponseDTO> create(@RequestBody PlannedAllocationCreateDTO plannedAllocationCreateDTO) throws Exception {
+    public ResponseEntity<PlannedAllocationResponseDTO> create(@RequestBody PlannedAllocationCreateDTO plannedAllocationCreateDTO) throws Throwable {
         log.trace("POST /planned-allocation - Creating a new planned allocation for user {}", plannedAllocationCreateDTO.userId());
         log.debug("Request body: {}", plannedAllocationCreateDTO);
 
-        PlannedAllocation plannedAllocation = service.create(plannedAllocationCreateDTO);
+        PlannedAllocationResponseDTO allocation = createCase.create(plannedAllocationCreateDTO);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(PlannedAllocationMapper.toDTO(plannedAllocation));
+        return ResponseEntity.status(HttpStatus.CREATED).body(allocation);
     }
 
     @PatchMapping("/{id}")
@@ -60,18 +62,8 @@ public class PlannedAllocationControllerImpl implements PlannedAllocationControl
         log.trace("PATCH /planned-allocation - Update a planned allocation for id: {}", id);
         log.debug("Request body: {}", plannedAllocationUpdateDTO);
 
-        PlannedAllocation plannedAllocation = service.update(Long.valueOf(id), plannedAllocationUpdateDTO);
+        PlannedAllocationResponseDTO allocation = updateCase.update(id, plannedAllocationUpdateDTO);
 
-        return ResponseEntity.status(HttpStatus.OK).body(PlannedAllocationMapper.toDTO(plannedAllocation));
-    }
-
-    @PatchMapping("{id}/fully-applied")
-    @Override
-    public ResponseEntity<PlannedAllocationResponseDTO> fullyApplied(@PathVariable("id") String id) throws BusinessException {
-        log.trace("PATCH /planned-allocation/{}/fully-applied - making full payment of an allocation", id);
-
-        PlannedAllocation plannedAllocation = service.fullyApplied(Long.parseLong(id));
-
-        return ResponseEntity.status(HttpStatus.OK).body(PlannedAllocationMapper.toDTO(plannedAllocation));
+        return ResponseEntity.status(HttpStatus.OK).body(allocation);
     }
 }

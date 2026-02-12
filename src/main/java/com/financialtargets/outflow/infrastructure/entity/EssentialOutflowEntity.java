@@ -1,7 +1,5 @@
 package com.financialtargets.outflow.infrastructure.entity;
 
-import com.financialtargets.outflow.domain.mapper.EssentialOutflowMapper;
-import com.financialtargets.outflow.domain.model.EssentialOutflow;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -59,8 +57,4 @@ public class EssentialOutflowEntity {
 
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
-
-    public EssentialOutflow toModel() {
-        return EssentialOutflowMapper.toModel(this);
-    }
 }

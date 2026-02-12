@@ -1,0 +1,47 @@
+package com.financialtargets.outflow.application.mapper;
+
+import com.financialtargets.outflow.application.dto.essential.EssentialOutflowResponseDTO;
+import com.financialtargets.outflow.domain.utils.AmountUtil;
+import com.financialtargets.outflow.domain.utils.DateUtil;
+import com.financialtargets.outflow.domain.enums.OutflowRecurrence;
+import com.financialtargets.outflow.domain.model.EssentialOutflow;
+import com.financialtargets.outflow.infrastructure.entity.EssentialOutflowEntity;
+import org.springframework.stereotype.Component;
+
+@Component
+public class EssentialOutflowMapper {
+
+    public EssentialOutflow toModel(EssentialOutflowEntity entity) {
+        EssentialOutflow essentialOutflow = new EssentialOutflow();
+
+        essentialOutflow.setId(entity.getId());
+        essentialOutflow.setName(entity.getName());
+        essentialOutflow.setAccountName(entity.getAccount().getName());
+        essentialOutflow.setDueDate(entity.getDueDate());
+        essentialOutflow.setValue(entity.getValue());
+        essentialOutflow.setPaidValue(entity.getPaidValue());
+        essentialOutflow.setFullyPaid(entity.getPaidValue().compareTo(entity.getValue()) >= 0);
+        essentialOutflow.setNotes(entity.getNotes());
+        essentialOutflow.setCreatedAt(entity.getCreatedAt());
+        essentialOutflow.setUpdatedAt(entity.getUpdatedAt());
+        essentialOutflow.setRecurrence(OutflowRecurrence.getRecurrenceById(entity.getId()));
+
+        return essentialOutflow;
+    }
+
+    public EssentialOutflowResponseDTO toResponse(EssentialOutflow essentialOutflow) {
+        return EssentialOutflowResponseDTO.builder()
+                .id(essentialOutflow.getId())
+                .name(essentialOutflow.getName())
+                .value(AmountUtil.formatAmount(essentialOutflow.getValue()))
+                .paidValue(AmountUtil.formatAmount(essentialOutflow.getPaidValue()))
+                .isFullyPaid(essentialOutflow.isFullyPaid())
+                .dueDate(DateUtil.formatDate(essentialOutflow.getDueDate()))
+                .notes(essentialOutflow.getNotes())
+                .accountName(essentialOutflow.getAccountName())
+                .recurrence(essentialOutflow.getRecurrence().getLabel())
+                .createdAt(DateUtil.formatDateTime(essentialOutflow.getCreatedAt()))
+                .updatedAt(DateUtil.formatDateTime(essentialOutflow.getUpdatedAt()))
+                .build();
+    }
+}

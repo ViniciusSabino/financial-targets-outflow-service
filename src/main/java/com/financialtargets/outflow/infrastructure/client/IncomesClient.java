@@ -1,6 +1,6 @@
 package com.financialtargets.outflow.infrastructure.client;
 
-import com.financialtargets.outflow.application.dto.IncomesSummaryResponseDTO;
+import com.financialtargets.outflow.application.dto.incomes.IncomesSummaryResponseDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

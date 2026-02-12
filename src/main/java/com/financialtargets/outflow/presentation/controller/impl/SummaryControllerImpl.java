@@ -1,9 +1,8 @@
 package com.financialtargets.outflow.presentation.controller.impl;
 
-import com.financialtargets.outflow.application.dto.EssentialOutflowSummaryResponseDTO;
-import com.financialtargets.outflow.application.dto.PlannedAllocationSummaryResponseDTO;
-import com.financialtargets.outflow.application.service.SummaryService;
-import com.financialtargets.outflow.domain.mapper.SummaryMapper;
+import com.financialtargets.outflow.application.dto.essential.EssentialOutflowSummaryResponseDTO;
+import com.financialtargets.outflow.application.dto.allocation.PlannedAllocationSummaryResponseDTO;
+import com.financialtargets.outflow.application.mapper.SummaryMapper;
 import com.financialtargets.outflow.domain.model.EssentialOutflowSummary;
 import com.financialtargets.outflow.domain.model.PlannedAllocationSummary;
 import com.financialtargets.outflow.presentation.controller.SummaryController;

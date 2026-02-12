@@ -1,9 +1,9 @@
 package com.financialtargets.outflow.presentation.controller;
 
-import com.financialtargets.outflow.application.dto.EssentialOutflowCreateDTO;
-import com.financialtargets.outflow.application.dto.EssentialOutflowResponseDTO;
-import com.financialtargets.outflow.application.dto.EssentialOutflowUpdateDTO;
-import com.financialtargets.outflow.domain.exception.BusinessException;
+import com.financialtargets.outflow.application.dto.essential.EssentialOutflowCreateDTO;
+import com.financialtargets.outflow.application.dto.essential.EssentialOutflowResponseDTO;
+import com.financialtargets.outflow.application.dto.essential.EssentialOutflowUpdateDTO;
+import com.financialtargets.outflow.domain.exception.EssentialOutflowException;
 import com.financialtargets.outflow.domain.exception.ResourceNotFoundException;
 import com.financialtargets.outflow.presentation.exception.ExceptionResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -94,7 +94,7 @@ public interface EssentialOutflowController {
                     })
             }
     )
-    ResponseEntity<EssentialOutflowResponseDTO> create(EssentialOutflowCreateDTO essentialOutflowCreateDTO) throws BusinessException;
+    ResponseEntity<EssentialOutflowResponseDTO> create(EssentialOutflowCreateDTO essentialOutflowCreateDTO) throws EssentialOutflowException;
 
     @Operation(summary = "Update a Essential Outflow",
             description = "Update a Essential Outflow",
@@ -132,5 +132,5 @@ public interface EssentialOutflowController {
                     })
             }
     )
-    ResponseEntity<EssentialOutflowResponseDTO> update(String id, EssentialOutflowUpdateDTO essentialOutflowUpdateDTO) throws BusinessException, ResourceNotFoundException;
+    ResponseEntity<EssentialOutflowResponseDTO> update(String id, EssentialOutflowUpdateDTO essentialOutflowUpdateDTO) throws EssentialOutflowException, ResourceNotFoundException;
 }

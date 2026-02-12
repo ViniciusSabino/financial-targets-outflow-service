@@ -1,13 +1,13 @@
 package com.financialtargets.outflow.presentation.controller.impl;
 
-import com.financialtargets.outflow.application.dto.EssentialOutflowCreateDTO;
-import com.financialtargets.outflow.application.dto.EssentialOutflowResponseDTO;
-import com.financialtargets.outflow.application.dto.EssentialOutflowUpdateDTO;
-import com.financialtargets.outflow.application.service.EssentialOutflowService;
-import com.financialtargets.outflow.domain.exception.BusinessException;
+import com.financialtargets.outflow.application.dto.essential.EssentialOutflowCreateDTO;
+import com.financialtargets.outflow.application.dto.essential.EssentialOutflowResponseDTO;
+import com.financialtargets.outflow.application.dto.essential.EssentialOutflowUpdateDTO;
+import com.financialtargets.outflow.application.usecase.essential.CreateEssentialOutflowUseCase;
+import com.financialtargets.outflow.application.usecase.essential.ListingOutflowUseCase;
+import com.financialtargets.outflow.application.usecase.essential.UpdateOutflowUseCase;
+import com.financialtargets.outflow.domain.exception.EssentialOutflowException;
 import com.financialtargets.outflow.domain.exception.ResourceNotFoundException;
-import com.financialtargets.outflow.domain.mapper.EssentialOutflowMapper;
-import com.financialtargets.outflow.domain.model.EssentialOutflow;
 import com.financialtargets.outflow.presentation.controller.EssentialOutflowController;
 import jakarta.validation.Valid;
 import lombok.NonNull;
@@ -32,37 +32,39 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class EssentialOutflowControllerImpl implements EssentialOutflowController {
-    private final EssentialOutflowService service;
+    private final CreateEssentialOutflowUseCase createEssentialOutflowUseCase;
+    private final ListingOutflowUseCase listingOutflowUseCaseUseCase;
+    private final UpdateOutflowUseCase updateOutflowUseCase;
+
+    @PostMapping
+    @Override
+    public ResponseEntity<EssentialOutflowResponseDTO> create(@Valid @RequestBody EssentialOutflowCreateDTO essentialOutflowCreateDTO) throws EssentialOutflowException {
+        log.trace("POST /essential-outflow - Creating a new essential outflow for user {}", essentialOutflowCreateDTO.userId());
+        log.debug("Request body: {}", essentialOutflowCreateDTO);
+
+        EssentialOutflowResponseDTO essentialOutflow = createEssentialOutflowUseCase.create(essentialOutflowCreateDTO);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(essentialOutflow);
+    }
 
     @GetMapping
     @Override
     public ResponseEntity<List<EssentialOutflowResponseDTO>> listByMonth(@RequestParam @Valid @NonNull String month, @RequestParam @Valid @NonNull String year) throws Exception {
         log.trace("GET /essential-outflow - List essential outflows by month: {} and year: {}", month, year);
 
-        List<EssentialOutflow> essentialsOutflow = service.listByMonth(Integer.parseInt(month), Integer.parseInt(year));
+        List<EssentialOutflowResponseDTO> essentialOutflows = listingOutflowUseCaseUseCase.byPeriod(month, year);
 
-        return ResponseEntity.status(HttpStatus.OK).body(EssentialOutflowMapper.toResponseList(essentialsOutflow));
-    }
-
-    @PostMapping
-    @Override
-    public ResponseEntity<EssentialOutflowResponseDTO> create(@Valid @RequestBody EssentialOutflowCreateDTO essentialOutflowCreateDTO) throws BusinessException {
-        log.trace("POST /essential-outflow - Creating a new essential outflow for user {}", essentialOutflowCreateDTO.userId());
-        log.debug("Request body: {}", essentialOutflowCreateDTO);
-
-        EssentialOutflow essentialOutflow = service.create(essentialOutflowCreateDTO);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(EssentialOutflowMapper.toResponse(essentialOutflow));
+        return ResponseEntity.status(HttpStatus.OK).body(essentialOutflows);
     }
 
     @PatchMapping("/{id}")
     @Override
-    public ResponseEntity<EssentialOutflowResponseDTO> update(@PathVariable("id") String id, @Valid @RequestBody EssentialOutflowUpdateDTO essentialOutflowUpdateDTO) throws BusinessException, ResourceNotFoundException {
+    public ResponseEntity<EssentialOutflowResponseDTO> update(@PathVariable("id") String id, @Valid @RequestBody EssentialOutflowUpdateDTO essentialOutflowUpdateDTO) throws EssentialOutflowException, ResourceNotFoundException {
         log.trace("PATCH /essential-outflow - Update a essential outflow for id: {}", id);
         log.debug("Request body: {}", essentialOutflowUpdateDTO);
 
-        EssentialOutflow essentialOutflow = service.update(Long.valueOf(id), essentialOutflowUpdateDTO);
+        EssentialOutflowResponseDTO essentialOutflow = updateOutflowUseCase.update(Long.valueOf(id), essentialOutflowUpdateDTO);
 
-        return ResponseEntity.status(HttpStatus.OK).body(EssentialOutflowMapper.toResponse(essentialOutflow));
+        return ResponseEntity.status(HttpStatus.OK).body(essentialOutflow);
     }
 }

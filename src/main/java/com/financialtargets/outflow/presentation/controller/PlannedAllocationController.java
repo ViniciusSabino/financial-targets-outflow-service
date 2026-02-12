@@ -1,9 +1,8 @@
 package com.financialtargets.outflow.presentation.controller;
 
-import com.financialtargets.outflow.application.dto.PlannedAllocationUpdateDTO;
-import com.financialtargets.outflow.application.dto.PlannedAllocationCreateDTO;
-import com.financialtargets.outflow.application.dto.PlannedAllocationResponseDTO;
-import com.financialtargets.outflow.domain.exception.BusinessException;
+import com.financialtargets.outflow.application.dto.allocation.PlannedAllocationUpdateDTO;
+import com.financialtargets.outflow.application.dto.allocation.PlannedAllocationCreateDTO;
+import com.financialtargets.outflow.application.dto.allocation.PlannedAllocationResponseDTO;
 import com.financialtargets.outflow.presentation.exception.ExceptionResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -93,7 +92,7 @@ public interface PlannedAllocationController {
                     })
             }
     )
-    ResponseEntity<PlannedAllocationResponseDTO> create(PlannedAllocationCreateDTO PlannedAllocationCreateDTO) throws Exception;
+    ResponseEntity<PlannedAllocationResponseDTO> create(PlannedAllocationCreateDTO PlannedAllocationCreateDTO) throws Throwable;
 
     @Operation(summary = "Update a planned allocation",
             description = "Update a planned allocation",
@@ -132,42 +131,4 @@ public interface PlannedAllocationController {
             }
     )
     ResponseEntity<PlannedAllocationResponseDTO> update(String id, PlannedAllocationUpdateDTO PlannedAllocationUpdateDTO) throws Exception;
-
-    @Operation(summary = "Making full applied of an allocation",
-            description = "Making full applied of an allocation",
-            tags = {"PlannedAllocation"},
-            responses = {
-                    @ApiResponse(description = "Success", responseCode = "200", content = {
-                            @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = PlannedAllocationResponseDTO.class)
-                            )
-                    }),
-                    @ApiResponse(description = "Bad Request", responseCode = "400", content = {
-                            @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = ExceptionResponse.class)
-                            )
-                    }),
-                    @ApiResponse(description = "Unauthorized", responseCode = "401", content = {
-                            @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = ExceptionResponse.class)
-                            )
-                    }),
-                    @ApiResponse(description = "Not Found", responseCode = "404", content = {
-                            @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = ExceptionResponse.class)
-                            )
-                    }),
-                    @ApiResponse(description = "Internal Server Error", responseCode = "500", content = {
-                            @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = ExceptionResponse.class)
-                            )
-                    })
-            }
-    )
-    ResponseEntity<PlannedAllocationResponseDTO> fullyApplied(String id) throws BusinessException;
 }

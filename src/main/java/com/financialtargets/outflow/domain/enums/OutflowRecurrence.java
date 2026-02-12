@@ -12,6 +12,7 @@ public enum OutflowRecurrence {
     ANNUAL(2L, "Anual");
 
     private final Long id;
+    @Getter
     private final String label;
 
     OutflowRecurrence(Long id, String label) {
@@ -25,16 +26,6 @@ public enum OutflowRecurrence {
         return filtered.orElse(OutflowRecurrence.MONTHLY);
     }
 
-    public static String getLabelById(Long id) {
-        Optional<OutflowRecurrence> filtered = Arrays.stream(OutflowRecurrence.values()).filter(i -> Objects.equals(i.getId(), id)).findFirst();
-
-        if (filtered.isPresent()) {
-            return filtered.get().getLabel();
-        }
-
-        return OutflowRecurrence.MONTHLY.getLabel();
-    }
-
     public static OutflowRecurrence getRecurrenceByText(String recurrence) {
         Optional<OutflowRecurrence> filtered = Arrays.stream(OutflowRecurrence.values()).filter(r -> Objects.equals(r.name(), recurrence)).findFirst();
 
@@ -42,9 +33,9 @@ public enum OutflowRecurrence {
 
     }
 
-    public static boolean isValidRecurrence(String recurrence) {
+    public static boolean isInvalidRecurrence(String recurrence) {
         Optional<OutflowRecurrence> filtered = Arrays.stream(OutflowRecurrence.values()).filter(r -> Objects.equals(r.name(), recurrence)).findFirst();
 
-        return filtered.isPresent();
+        return filtered.isEmpty();
     }
 }

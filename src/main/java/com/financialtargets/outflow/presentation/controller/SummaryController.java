@@ -1,7 +1,7 @@
 package com.financialtargets.outflow.presentation.controller;
 
-import com.financialtargets.outflow.application.dto.EssentialOutflowSummaryResponseDTO;
-import com.financialtargets.outflow.application.dto.PlannedAllocationSummaryResponseDTO;
+import com.financialtargets.outflow.application.dto.essential.EssentialOutflowSummaryResponseDTO;
+import com.financialtargets.outflow.application.dto.allocation.PlannedAllocationSummaryResponseDTO;
 import com.financialtargets.outflow.presentation.exception.ExceptionResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

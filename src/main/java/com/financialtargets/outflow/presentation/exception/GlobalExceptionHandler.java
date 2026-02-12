@@ -1,7 +1,8 @@
 package com.financialtargets.outflow.presentation.exception;
 
 import com.financialtargets.outflow.domain.exception.BadRequestException;
-import com.financialtargets.outflow.domain.exception.BusinessException;
+import com.financialtargets.outflow.domain.exception.EssentialOutflowException;
+import com.financialtargets.outflow.domain.exception.PlannedAllocationException;
 import com.financialtargets.outflow.domain.exception.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
@@ -58,8 +59,17 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(response);
     }
 
-    @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<ExceptionResponse> handleBusinessException(BusinessException ex) {
+    @ExceptionHandler(PlannedAllocationException.class)
+    public ResponseEntity<ExceptionResponse> handlePlannedAllocationException(PlannedAllocationException ex) {
+        ExceptionResponse response = new ExceptionResponse(ex.getMessage(), HttpStatus.BAD_REQUEST.toString());
+
+        log.warn("Planned Allocation Exception: {}", ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    @ExceptionHandler(EssentialOutflowException.class)
+    public ResponseEntity<ExceptionResponse> handleBusinessException(EssentialOutflowException ex) {
         ExceptionResponse response = new ExceptionResponse(ex.getMessage(), HttpStatus.BAD_REQUEST.toString());
 
         log.warn("Business Exception: {}", ex.getMessage());
