@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class SummaryMapper {
-    public EssentialOutflowSummaryResponseDTO mapOutflowSummary(EssentialOutflowSummary essentialOutflowSummary) {
+    public EssentialOutflowSummaryResponseDTO toEssentialOutflowSummaryResponse(EssentialOutflowSummary essentialOutflowSummary) {
         return EssentialOutflowSummaryResponseDTO.builder()
                 .totalAmount(AmountUtil.formatAmount(essentialOutflowSummary.getTotalAmount()))
                 .totalAmountProcessed(AmountUtil.formatAmount(essentialOutflowSummary.getTotalAmountProcessed()))
@@ -19,7 +19,7 @@ public class SummaryMapper {
                 .build();
     }
 
-    public PlannedAllocationSummaryResponseDTO mapAllocationsSummary(PlannedAllocationSummary plannedAllocationSummary) {
+    public PlannedAllocationSummaryResponseDTO toPlannedAllocationSummaryResponse(PlannedAllocationSummary plannedAllocationSummary) {
         return PlannedAllocationSummaryResponseDTO.builder()
                 .totalAmount(AmountUtil.formatAmount(plannedAllocationSummary.getTotalAmount()))
                 .totalAmountProcessed(AmountUtil.formatAmount(plannedAllocationSummary.getTotalAmountProcessed()))

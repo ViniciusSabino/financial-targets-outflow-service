@@ -22,40 +22,40 @@ public class PlannedAllocationUpdater extends UpdateOutflowTemplate<PlannedAlloc
     }
 
     @Override
-    protected void validate(PlannedAllocation allocation) throws PlannedAllocationException {
-        if (!Objects.isNull(allocation.getRecurrence()) && OutflowRecurrence.isInvalidRecurrence(allocation.getRecurrence().getLabel()))
+    protected void validate(PlannedAllocation update) throws PlannedAllocationException {
+        if (!Objects.isNull(update.getRecurrence()) && OutflowRecurrence.isInvalidRecurrence(update.getRecurrence().getLabel()))
             throw new PlannedAllocationException("Invalid recurrence for create a new planned allocation");
 
-        Account account = accountService.getAccountById(allocation.getAccountId());
+        Account account = accountService.getAccountById(update.getAccountId());
 
-        if(Objects.isNull(account) || !account.isActive()) {
+        if (Objects.isNull(account) || !account.isActive()) {
             throw new PlannedAllocationException("The account provided does not exist or is inactive");
         }
     }
 
     @Override
-    protected PlannedAllocation checkExistence(PlannedAllocation allocation) throws ResourceNotFoundException {
-        return service.findById(allocation.getId());
+    protected PlannedAllocation checkExistence(PlannedAllocation update) throws ResourceNotFoundException {
+        return service.findById(update.getId());
     }
 
     @Override
-    protected void checkForDuplicates(PlannedAllocation allocation, PlannedAllocation current) throws PlannedAllocationException {
-        if (Objects.equals(current.getName(), allocation.getName()) && !Objects.equals(current.getId(), allocation.getId())) {
+    protected void checkForDuplicates(PlannedAllocation update, PlannedAllocation current) throws PlannedAllocationException {
+        if (Objects.equals(current.getName(), update.getName()) && !Objects.equals(current.getId(), update.getId())) {
             throw new PlannedAllocationException("There is already an allocation exit with that name");
         }
     }
 
     @Override
-    protected void prepareUpdate(PlannedAllocation allocation, PlannedAllocation current) {
-        if(!Objects.isNull(allocation.getAccountId()) && !allocation.getAccountId().equals(current.getAccountId())) {
-            current.setAccountId(allocation.getAccountId());
+    protected void prepareUpdate(PlannedAllocation update, PlannedAllocation current) {
+        if (!Objects.isNull(update.getAccountId()) && !update.getAccountId().equals(current.getAccountId())) {
+            current.setAccountId(update.getAccountId());
         }
 
-        if (!Objects.isNull(allocation.getName())) current.setName(allocation.getName());
-        if (!Objects.isNull(allocation.getAppliedValue())) current.setAppliedValue(allocation.getAppliedValue());
-        if (!Objects.isNull(allocation.getAllocationDate())) current.setAllocationDate(allocation.getAllocationDate());
-        if (!Objects.isNull(allocation.getNotes())) current.setNotes(allocation.getNotes());
-        if (!Objects.isNull(allocation.getRecurrence())) current.setRecurrence(allocation.getRecurrence());
+        if (!Objects.isNull(update.getName())) current.setName(update.getName());
+        if (!Objects.isNull(update.getAppliedValue())) current.setAppliedValue(update.getAppliedValue());
+        if (!Objects.isNull(update.getAllocationDate())) current.setAllocationDate(update.getAllocationDate());
+        if (!Objects.isNull(update.getNotes())) current.setNotes(update.getNotes());
+        if (!Objects.isNull(update.getRecurrence())) current.setRecurrence(update.getRecurrence());
 
         current.setUpdatedAt(DateUtil.getNowGlobalDate());
     }

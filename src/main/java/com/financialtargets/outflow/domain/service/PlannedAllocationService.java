@@ -4,6 +4,7 @@ import com.financialtargets.outflow.domain.model.DateFilter;
 import com.financialtargets.outflow.domain.repository.PlannedAllocationRepository;
 import com.financialtargets.outflow.domain.exception.ResourceNotFoundException;
 import com.financialtargets.outflow.domain.model.PlannedAllocation;
+
 import java.util.List;
 
 public class PlannedAllocationService {
@@ -28,7 +29,7 @@ public class PlannedAllocationService {
     public List<PlannedAllocation> listByDate(String month, String year) throws Exception {
         DateFilter dateFilter = new DateFilter(month, year);
 
-        return repository.findByDate(dateFilter);
+        return repository.listByDate(dateFilter);
     }
 
     public PlannedAllocation update(PlannedAllocation allocation) throws Exception {

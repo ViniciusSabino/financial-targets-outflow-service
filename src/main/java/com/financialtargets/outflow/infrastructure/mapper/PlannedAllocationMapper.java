@@ -3,22 +3,12 @@ package com.financialtargets.outflow.infrastructure.mapper;
 import com.financialtargets.outflow.domain.enums.OutflowRecurrence;
 import com.financialtargets.outflow.domain.model.PlannedAllocation;
 import com.financialtargets.outflow.infrastructure.entity.PlannedAllocationEntity;
-import com.financialtargets.outflow.infrastructure.repository.AccountsJpaRepository;
-import com.financialtargets.outflow.infrastructure.repository.UsersJpaRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-@Component
-@RequiredArgsConstructor
+@Component("InfrastructurePlannedAllocationMapper")
 public class PlannedAllocationMapper {
-    private final UsersJpaRepository usersJpaRepository;
-    private final AccountsJpaRepository accountsJpaRepository;
-
     public PlannedAllocationEntity toEntity(PlannedAllocation allocation) {
         PlannedAllocationEntity entity = new PlannedAllocationEntity();
-
-        entity.setUser(usersJpaRepository.getReferenceById(allocation.getUserId()));
-        entity.setAccount(accountsJpaRepository.getReferenceById(allocation.getAccountId()));
 
         entity.setName(allocation.getName());
         entity.setDefinedPercentage(allocation.getDefinedPercentage());

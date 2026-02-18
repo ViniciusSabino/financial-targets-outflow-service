@@ -17,7 +17,7 @@ import java.time.Instant;
 @NoArgsConstructor
 @Entity
 @Data
-@Table(name = "outflow_allocations")
+@Table(name = "planned_allocations")
 public class PlannedAllocationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

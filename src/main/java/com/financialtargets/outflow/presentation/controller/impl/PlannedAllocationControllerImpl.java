@@ -30,7 +30,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class PlannedAllocationControllerImpl implements PlannedAllocationController {
-
     private final CreatePlannedAllocationUseCase createCase;
     private final ListingPlannedAllocationUseCase listingCase;
     private final UpdatePlannedAllocationUseCase updateCase;

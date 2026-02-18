@@ -2,10 +2,10 @@ package com.financialtargets.outflow.application.usecase.essential;
 
 import com.financialtargets.outflow.application.dto.essential.EssentialOutflowResponseDTO;
 import com.financialtargets.outflow.application.dto.essential.EssentialOutflowUpdateDTO;
-import com.financialtargets.outflow.domain.exception.EssentialOutflowException;
-import com.financialtargets.outflow.domain.exception.ResourceNotFoundException;
 import com.financialtargets.outflow.application.mapper.EssentialOutflowMapper;
 import com.financialtargets.outflow.domain.model.EssentialOutflow;
+
+import com.financialtargets.outflow.domain.policy.essential.update.EssentialOutflowUpdater;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -13,16 +13,17 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class UpdateOutflowUseCase implements UpdateOutflowUseCase {
-    private final EssentialOutflowService service;
-    @Override
-    public EssentialOutflowResponseDTO update(Long id, EssentialOutflowUpdateDTO essentialOutflowUpdateDTO) throws EssentialOutflowException, ResourceNotFoundException {
-        service.validOutflowRecurrence(essentialOutflowUpdateDTO.recurrence());
+public class UpdateOutflowUseCase {
+    private final EssentialOutflowUpdater updater;
+    private final EssentialOutflowMapper mapper;
 
-        EssentialOutflow essentialOutflowUpdate = new EssentialOutflow(essentialOutflowUpdateDTO);
+    public EssentialOutflowResponseDTO update(Long id, EssentialOutflowUpdateDTO essentialOutflowUpdateDTO) throws Exception {
+        EssentialOutflow outflow = mapper.toModel(essentialOutflowUpdateDTO);
 
-        EssentialOutflow essentialOutflow = service.update(id, essentialOutflowUpdate);
+        EssentialOutflow outflowUpdated = updater.processUpdate(outflow);
 
-        return EssentialOutflowMapper.toResponse(essentialOutflow);
+        log.info("Essential Outflow updated successfully, Id: {}", outflowUpdated.getId());
+
+        return mapper.toResponse(outflowUpdated);
     }
 }

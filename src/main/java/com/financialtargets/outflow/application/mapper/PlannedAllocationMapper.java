@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
-@Component
+@Component("ApplicationPlannedAllocationMapper")
 public class PlannedAllocationMapper {
 
     public PlannedAllocation toModel(PlannedAllocationCreateDTO plannedAllocationCreateDTO) {
@@ -48,7 +48,7 @@ public class PlannedAllocationMapper {
         plannedAllocation.setNotes(plannedAllocationUpdateDTO.notes());
         plannedAllocation.setUpdatedAt(DateUtil.getNowGlobalDate());
 
-        if(!Objects.isNull(plannedAllocationUpdateDTO.allocationDate())) {
+        if (!Objects.isNull(plannedAllocationUpdateDTO.allocationDate())) {
             plannedAllocation.setAllocationDate(DateUtil.getStartOfDayByDate(plannedAllocationUpdateDTO.allocationDate()));
         }
 

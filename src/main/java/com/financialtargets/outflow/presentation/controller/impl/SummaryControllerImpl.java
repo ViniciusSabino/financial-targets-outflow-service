@@ -1,10 +1,9 @@
 package com.financialtargets.outflow.presentation.controller.impl;
 
-import com.financialtargets.outflow.application.dto.essential.EssentialOutflowSummaryResponseDTO;
 import com.financialtargets.outflow.application.dto.allocation.PlannedAllocationSummaryResponseDTO;
-import com.financialtargets.outflow.application.mapper.SummaryMapper;
-import com.financialtargets.outflow.domain.model.EssentialOutflowSummary;
-import com.financialtargets.outflow.domain.model.PlannedAllocationSummary;
+import com.financialtargets.outflow.application.dto.essential.EssentialOutflowSummaryResponseDTO;
+import com.financialtargets.outflow.application.usecase.summary.GetEssentialOutflowSummaryUseCase;
+import com.financialtargets.outflow.application.usecase.summary.GetPlannedAllocationSummaryUseCase;
 import com.financialtargets.outflow.presentation.controller.SummaryController;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -21,16 +20,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @Slf4j
 public class SummaryControllerImpl implements SummaryController {
-    private final SummaryService service;
+    private final GetEssentialOutflowSummaryUseCase getEssentialOutflowSummaryUseCase;
+    private final GetPlannedAllocationSummaryUseCase getPlannedAllocationSummaryUseCase;
 
     @GetMapping("/essential-outflow")
     @Override
     public ResponseEntity<EssentialOutflowSummaryResponseDTO> getEssentialOutflowSummary(@NonNull String month, @NonNull String year) throws Exception {
         log.trace("GET /summary/essential-outflow - Get essential outflows summary by month: {} and year: {}", month, year);
 
-        EssentialOutflowSummary essentialOutflowSummary = service.getEssentialOutflowSummary(Integer.parseInt(month), Integer.parseInt(year));
+        EssentialOutflowSummaryResponseDTO essentialOutflowSummary = getEssentialOutflowSummaryUseCase.byPeriod(month, year);
 
-        return ResponseEntity.status(HttpStatus.OK).body(SummaryMapper.mapOutflowSummary(essentialOutflowSummary));
+        return ResponseEntity.status(HttpStatus.OK).body(essentialOutflowSummary);
     }
 
     @GetMapping("/outflow-allocation")
@@ -38,8 +38,8 @@ public class SummaryControllerImpl implements SummaryController {
     public ResponseEntity<PlannedAllocationSummaryResponseDTO> getOutflowAllocationSummary(@NonNull String month, @NonNull String year) throws Exception {
         log.trace("GET /summary/outflow-allocation - Get outflow allocations summary by month: {} and year: {}", month, year);
 
-        PlannedAllocationSummary plannedAllocationSummary = service.getPlannedAllocationSummary(Integer.parseInt(month), Integer.parseInt(year));
+        PlannedAllocationSummaryResponseDTO plannedAllocationSummary = getPlannedAllocationSummaryUseCase.byPeriod(month, year);
 
-        return ResponseEntity.status(HttpStatus.OK).body(SummaryMapper.mapAllocationsSummary(plannedAllocationSummary));
+        return ResponseEntity.status(HttpStatus.OK).body(plannedAllocationSummary);
     }
 }

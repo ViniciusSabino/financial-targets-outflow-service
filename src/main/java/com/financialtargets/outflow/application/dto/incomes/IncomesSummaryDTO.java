@@ -6,23 +6,16 @@ import lombok.Builder;
 import java.math.BigDecimal;
 
 @Builder
-public record IncomesSummaryResponseDTO(
+public record IncomesSummaryDTO(
         @JsonProperty("totalExpected")
-        String totalExpected,
-
-        @JsonProperty("totalExpectedValue")
-        BigDecimal totalExpectedValue,
+        BigDecimal totalExpected,
 
         @JsonProperty("totalReceived")
-        String totalReceived,
-
-        @JsonProperty("totalReceivedValue")
-        BigDecimal totalReceivedValue,
+        BigDecimal totalReceived,
 
         @JsonProperty("countExpected")
         Integer countExpected,
 
         @JsonProperty("countReceived")
         Integer countReceived
-) {
-}
+) { }

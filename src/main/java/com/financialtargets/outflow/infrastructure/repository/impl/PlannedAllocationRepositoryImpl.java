@@ -6,7 +6,9 @@ import com.financialtargets.outflow.domain.model.PlannedAllocation;
 import com.financialtargets.outflow.domain.repository.PlannedAllocationRepository;
 import com.financialtargets.outflow.infrastructure.entity.PlannedAllocationEntity;
 import com.financialtargets.outflow.infrastructure.mapper.PlannedAllocationMapper;
+import com.financialtargets.outflow.infrastructure.repository.AccountsJpaRepository;
 import com.financialtargets.outflow.infrastructure.repository.PlannedAllocationJpaRepository;
+import com.financialtargets.outflow.infrastructure.repository.UsersJpaRepository;
 import com.financialtargets.outflow.infrastructure.repository.specification.PlannedAllocationSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -15,9 +17,10 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-public class PlannedAllocationImplRepository implements PlannedAllocationRepository {
-
+public class PlannedAllocationRepositoryImpl implements PlannedAllocationRepository {
     private final PlannedAllocationJpaRepository repository;
+    private final UsersJpaRepository usersJpaRepository;
+    private final AccountsJpaRepository accountsJpaRepository;
     private final PlannedAllocationMapper mapper;
 
     @Override
@@ -42,7 +45,7 @@ public class PlannedAllocationImplRepository implements PlannedAllocationReposit
     }
 
     @Override
-    public List<PlannedAllocation> findByDate(DateFilter dateFilter) {
+    public List<PlannedAllocation> listByDate(DateFilter dateFilter) {
         List<PlannedAllocationEntity> allocations = repository.findAll(PlannedAllocationSpecification.byFilter(dateFilter)).stream().toList();
 
         return allocations.stream().map(mapper::toModel).toList();
@@ -51,6 +54,9 @@ public class PlannedAllocationImplRepository implements PlannedAllocationReposit
     @Override
     public PlannedAllocation update(PlannedAllocation allocation) throws ResourceNotFoundException {
         PlannedAllocationEntity entity = mapper.toEntity(allocation);
+
+        entity.setUser(usersJpaRepository.getReferenceById(allocation.getUserId()));
+        entity.setAccount(accountsJpaRepository.getReferenceById(allocation.getAccountId()));
 
         return mapper.toModel(repository.save(entity));
     }

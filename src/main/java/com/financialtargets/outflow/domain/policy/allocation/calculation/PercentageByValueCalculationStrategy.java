@@ -6,7 +6,7 @@ import com.financialtargets.outflow.domain.model.PlannedAllocationSummary;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class PercentageCalculationByValueStrategy implements PlannedAllocationCalculationValuePolicy {
+public class PercentageByValueCalculationStrategy implements ValueCalculationPolicy {
     @Override
     public void calculate(PlannedAllocation plannedAllocation, PlannedAllocationSummary plannedAllocationSummary) {
         BigDecimal percentage = plannedAllocationSummary.getTotalAmount().divide(plannedAllocation.getValue(), 2, RoundingMode.HALF_UP);

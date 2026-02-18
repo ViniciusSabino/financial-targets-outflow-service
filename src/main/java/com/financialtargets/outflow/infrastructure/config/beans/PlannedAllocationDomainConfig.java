@@ -1,8 +1,10 @@
 package com.financialtargets.outflow.infrastructure.config.beans;
 
-import com.financialtargets.outflow.domain.policy.allocation.calculation.PlannedAllocationCalculationResolver;
+import com.financialtargets.outflow.domain.policy.allocation.calculation.ValueCalculationResolver;
 import com.financialtargets.outflow.domain.policy.allocation.create.PlannedAllocationCreator;
+import com.financialtargets.outflow.domain.policy.allocation.update.PlannedAllocationUpdater;
 import com.financialtargets.outflow.domain.repository.PlannedAllocationRepository;
+import com.financialtargets.outflow.domain.service.AccountService;
 import com.financialtargets.outflow.domain.service.PlannedAllocationService;
 import com.financialtargets.outflow.domain.service.SummaryService;
 import org.springframework.context.annotation.Bean;
@@ -16,12 +18,17 @@ public class PlannedAllocationDomainConfig {
     }
 
     @Bean
-    public PlannedAllocationCalculationResolver plannedAllocationCalculationResolver() {
-        return new PlannedAllocationCalculationResolver();
+    public ValueCalculationResolver valueCalculationResolver() {
+        return new ValueCalculationResolver();
     }
 
     @Bean
-    public PlannedAllocationCreator plannedAllocationCreator(PlannedAllocationService service, SummaryService summaryService, PlannedAllocationCalculationResolver plannedAllocationCalculationResolver) {
-        return new PlannedAllocationCreator(service, summaryService, plannedAllocationCalculationResolver);
+    public PlannedAllocationCreator plannedAllocationCreator(PlannedAllocationService service, SummaryService summaryService, ValueCalculationResolver valueCalculationResolver) {
+        return new PlannedAllocationCreator(service, summaryService, valueCalculationResolver);
+    }
+
+    @Bean
+    public PlannedAllocationUpdater plannedAllocationUpdater(PlannedAllocationService service, AccountService accountService) {
+        return new PlannedAllocationUpdater(service, accountService);
     }
 }

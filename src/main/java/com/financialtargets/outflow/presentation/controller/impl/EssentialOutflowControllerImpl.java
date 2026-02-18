@@ -4,10 +4,8 @@ import com.financialtargets.outflow.application.dto.essential.EssentialOutflowCr
 import com.financialtargets.outflow.application.dto.essential.EssentialOutflowResponseDTO;
 import com.financialtargets.outflow.application.dto.essential.EssentialOutflowUpdateDTO;
 import com.financialtargets.outflow.application.usecase.essential.CreateEssentialOutflowUseCase;
-import com.financialtargets.outflow.application.usecase.essential.ListingOutflowUseCase;
+import com.financialtargets.outflow.application.usecase.essential.ListingEssentialOutflowUseCase;
 import com.financialtargets.outflow.application.usecase.essential.UpdateOutflowUseCase;
-import com.financialtargets.outflow.domain.exception.EssentialOutflowException;
-import com.financialtargets.outflow.domain.exception.ResourceNotFoundException;
 import com.financialtargets.outflow.presentation.controller.EssentialOutflowController;
 import jakarta.validation.Valid;
 import lombok.NonNull;
@@ -33,12 +31,12 @@ import java.util.List;
 @Slf4j
 public class EssentialOutflowControllerImpl implements EssentialOutflowController {
     private final CreateEssentialOutflowUseCase createEssentialOutflowUseCase;
-    private final ListingOutflowUseCase listingOutflowUseCaseUseCase;
+    private final ListingEssentialOutflowUseCase listingEssentialOutflowUseCaseUseCase;
     private final UpdateOutflowUseCase updateOutflowUseCase;
 
     @PostMapping
     @Override
-    public ResponseEntity<EssentialOutflowResponseDTO> create(@Valid @RequestBody EssentialOutflowCreateDTO essentialOutflowCreateDTO) throws EssentialOutflowException {
+    public ResponseEntity<EssentialOutflowResponseDTO> create(@Valid @RequestBody EssentialOutflowCreateDTO essentialOutflowCreateDTO) throws Exception {
         log.trace("POST /essential-outflow - Creating a new essential outflow for user {}", essentialOutflowCreateDTO.userId());
         log.debug("Request body: {}", essentialOutflowCreateDTO);
 
@@ -52,14 +50,14 @@ public class EssentialOutflowControllerImpl implements EssentialOutflowControlle
     public ResponseEntity<List<EssentialOutflowResponseDTO>> listByMonth(@RequestParam @Valid @NonNull String month, @RequestParam @Valid @NonNull String year) throws Exception {
         log.trace("GET /essential-outflow - List essential outflows by month: {} and year: {}", month, year);
 
-        List<EssentialOutflowResponseDTO> essentialOutflows = listingOutflowUseCaseUseCase.byPeriod(month, year);
+        List<EssentialOutflowResponseDTO> essentialOutflows = listingEssentialOutflowUseCaseUseCase.byPeriod(month, year);
 
         return ResponseEntity.status(HttpStatus.OK).body(essentialOutflows);
     }
 
     @PatchMapping("/{id}")
     @Override
-    public ResponseEntity<EssentialOutflowResponseDTO> update(@PathVariable("id") String id, @Valid @RequestBody EssentialOutflowUpdateDTO essentialOutflowUpdateDTO) throws EssentialOutflowException, ResourceNotFoundException {
+    public ResponseEntity<EssentialOutflowResponseDTO> update(@PathVariable("id") String id, @Valid @RequestBody EssentialOutflowUpdateDTO essentialOutflowUpdateDTO) throws Exception {
         log.trace("PATCH /essential-outflow - Update a essential outflow for id: {}", id);
         log.debug("Request body: {}", essentialOutflowUpdateDTO);
 

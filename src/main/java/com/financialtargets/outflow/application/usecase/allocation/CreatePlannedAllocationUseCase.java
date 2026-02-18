@@ -19,7 +19,7 @@ public class CreatePlannedAllocationUseCase {
     public PlannedAllocationResponseDTO create(PlannedAllocationCreateDTO plannedAllocationCreateDTO) throws Throwable {
         PlannedAllocation allocation = mapper.toModel(plannedAllocationCreateDTO);
 
-        PlannedAllocation allocationCreated = creator.processUpdate(allocation);
+        PlannedAllocation allocationCreated = creator.processCreate(allocation);
 
         log.info("Planned Allocation saved successfully, Id: {}", allocationCreated.getId());
 

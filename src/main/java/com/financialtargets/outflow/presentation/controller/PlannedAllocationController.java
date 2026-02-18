@@ -17,7 +17,6 @@ import java.util.List;
 
 @Tag(name = "PlannedAllocation", description = "Endpoints from Managing planned allocations")
 public interface PlannedAllocationController {
-
     @Operation(summary = "List planned allocations by month and year parameter",
             description = "List planned allocations by month and year parameter",
             tags = {"PlannedAllocation"},

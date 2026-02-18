@@ -19,10 +19,6 @@ public class DateUtil {
         return Instant.now().atZone(DateConstants.DEFAULT_TIME_ZONE).toInstant();
     }
 
-    public static LocalDate getNowLocalDate() {
-        return LocalDate.now();
-    }
-
     public static String formatDate(Instant date) {
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern(DateConstants.DEFAULT_DATE_FORMAT).withZone(DateConstants.DEFAULT_TIME_ZONE);
 
@@ -67,5 +63,13 @@ public class DateUtil {
             throw new Exception(e.getMessage());
 
         }
+    }
+
+    public static String getCurrentMonth() {
+        return String.valueOf(LocalDate.now().getMonth().getValue());
+    }
+
+    public static String getCurrentYear() {
+        return String.valueOf(LocalDate.now().getYear());
     }
 }

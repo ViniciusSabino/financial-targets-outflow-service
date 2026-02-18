@@ -2,7 +2,7 @@ package com.financialtargets.outflow.domain.policy.templates;
 
 public abstract class CreateOutflowTemplate<O, EX extends Throwable> {
 
-    public final O processUpdate(O outflow) throws EX, Exception {
+    public final O processCreate(O outflow) throws EX, Exception {
         validate(outflow);
         checkExistence(outflow);
         prepareSave(outflow);

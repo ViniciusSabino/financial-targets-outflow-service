@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "Summary", description = "Endpoints from Summary Outflows")
 public interface SummaryController {
-
     @Operation(summary = "Get Essential Outflow Summary",
             description = "Get Essential Outflow Summary",
             tags = {"Summary"},

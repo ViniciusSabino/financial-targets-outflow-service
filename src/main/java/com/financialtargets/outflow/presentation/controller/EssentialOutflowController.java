@@ -19,7 +19,6 @@ import java.util.List;
 
 @Tag(name = "EssentialOutflow", description = "Endpoints from Managing Essential Outflows")
 public interface EssentialOutflowController {
-
     @Operation(summary = "List Essential Outflows by month and year parameter",
             description = "List Essential Outflows by month and year parameter",
             tags = {"EssentialOutflow"},
@@ -94,7 +93,7 @@ public interface EssentialOutflowController {
                     })
             }
     )
-    ResponseEntity<EssentialOutflowResponseDTO> create(EssentialOutflowCreateDTO essentialOutflowCreateDTO) throws EssentialOutflowException;
+    ResponseEntity<EssentialOutflowResponseDTO> create(EssentialOutflowCreateDTO essentialOutflowCreateDTO) throws Exception;
 
     @Operation(summary = "Update a Essential Outflow",
             description = "Update a Essential Outflow",
@@ -132,5 +131,5 @@ public interface EssentialOutflowController {
                     })
             }
     )
-    ResponseEntity<EssentialOutflowResponseDTO> update(String id, EssentialOutflowUpdateDTO essentialOutflowUpdateDTO) throws EssentialOutflowException, ResourceNotFoundException;
+    ResponseEntity<EssentialOutflowResponseDTO> update(String id, EssentialOutflowUpdateDTO essentialOutflowUpdateDTO) throws Exception;
 }

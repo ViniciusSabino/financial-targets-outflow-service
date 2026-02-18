@@ -12,6 +12,7 @@ public enum OutflowRecurrence {
     ANNUAL(2L, "Anual");
 
     private final Long id;
+
     @Getter
     private final String label;
 
