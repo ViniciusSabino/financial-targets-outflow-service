@@ -28,7 +28,12 @@ public class EssentialOutflowRepositoryImpl implements EssentialOutflowRepositor
     public EssentialOutflow save(EssentialOutflow outflow) {
         EssentialOutflowEntity entity = mapper.toEntity(outflow);
 
-        return mapper.toModel(repository.save(entity));
+        entity.setUser(usersJpaRepository.getReferenceById(outflow.getUserId()));
+        entity.setAccount(accountsJpaRepository.getReferenceById(outflow.getAccountId()));
+
+        EssentialOutflowEntity saved = repository.save(entity);
+
+        return mapper.toModel(saved);
     }
 
     @Override

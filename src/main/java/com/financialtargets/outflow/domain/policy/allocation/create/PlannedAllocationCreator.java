@@ -26,7 +26,7 @@ public class PlannedAllocationCreator extends CreateOutflowTemplate<PlannedAlloc
 
     @Override
     protected void validate(PlannedAllocation allocation) throws PlannedAllocationException {
-        if (OutflowRecurrence.isInvalidRecurrence(allocation.getRecurrence().getLabel()))
+        if (OutflowRecurrence.isInvalidRecurrence(allocation.getRecurrence().name()))
             throw new PlannedAllocationException("Invalid recurrence for create or update a planned allocation");
 
         if (Objects.isNull(allocation.getDefinedPercentage()) && Objects.isNull(allocation.getValue()))
@@ -38,7 +38,9 @@ public class PlannedAllocationCreator extends CreateOutflowTemplate<PlannedAlloc
 
     @Override
     protected void checkExistence(PlannedAllocation allocation) throws PlannedAllocationException {
-        if (!Objects.isNull(service.findByName(allocation.getName()))) {
+        PlannedAllocation existingAllocation = service.findByName(allocation.getName());
+
+        if (existingAllocation.getName() != null) {
             throw new PlannedAllocationException("There is already an planned allocation with that name");
         }
     }

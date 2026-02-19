@@ -17,14 +17,16 @@ public class EssentialOutflowCreator extends CreateOutflowTemplate<EssentialOutf
 
     @Override
     protected void validate(EssentialOutflow outflow) throws EssentialOutflowException {
-        if (OutflowRecurrence.isInvalidRecurrence(outflow.getRecurrence().getLabel())) {
+        if (OutflowRecurrence.isInvalidRecurrence(outflow.getRecurrence().name())) {
             throw new EssentialOutflowException("Invalid recurrence for create or update a essential outflow");
         }
     }
 
     @Override
     protected void checkExistence(EssentialOutflow outflow) throws EssentialOutflowException {
-        if (!Objects.isNull(service.findByName(outflow.getName()))) {
+        EssentialOutflow existingOutflow = service.findByName(outflow.getName());
+
+        if (existingOutflow.getId() != null) {
             throw new EssentialOutflowException("There is already an essential outflow with that name");
         }
     }

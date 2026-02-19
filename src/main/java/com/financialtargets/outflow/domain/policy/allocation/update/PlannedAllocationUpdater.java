@@ -23,7 +23,7 @@ public class PlannedAllocationUpdater extends UpdateOutflowTemplate<PlannedAlloc
 
     @Override
     protected void validate(PlannedAllocation update) throws PlannedAllocationException {
-        if (!Objects.isNull(update.getRecurrence()) && OutflowRecurrence.isInvalidRecurrence(update.getRecurrence().getLabel()))
+        if (!Objects.isNull(update.getRecurrence()) && OutflowRecurrence.isInvalidRecurrence(update.getRecurrence().name()))
             throw new PlannedAllocationException("Invalid recurrence for create a new planned allocation");
 
         Account account = accountService.getAccountById(update.getAccountId());

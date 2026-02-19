@@ -24,8 +24,11 @@ public class PlannedAllocationRepositoryImpl implements PlannedAllocationReposit
     private final PlannedAllocationMapper mapper;
 
     @Override
-    public PlannedAllocation save(PlannedAllocation plannedAllocation) {
-        PlannedAllocationEntity entity = mapper.toEntity(plannedAllocation);
+    public PlannedAllocation save(PlannedAllocation allocation) {
+        PlannedAllocationEntity entity = mapper.toEntity(allocation);
+
+        entity.setUser(usersJpaRepository.getReferenceById(allocation.getUserId()));
+        entity.setAccount(accountsJpaRepository.getReferenceById(allocation.getAccountId()));
 
         return mapper.toModel(repository.save(entity));
     }
