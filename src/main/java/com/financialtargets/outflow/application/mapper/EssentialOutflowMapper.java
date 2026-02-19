@@ -3,6 +3,7 @@ package com.financialtargets.outflow.application.mapper;
 import com.financialtargets.outflow.application.dto.essential.EssentialOutflowCreateDTO;
 import com.financialtargets.outflow.application.dto.essential.EssentialOutflowResponseDTO;
 import com.financialtargets.outflow.application.dto.essential.EssentialOutflowUpdateDTO;
+import com.financialtargets.outflow.domain.enums.OutflowRecurrence;
 import com.financialtargets.outflow.domain.utils.AmountUtil;
 import com.financialtargets.outflow.domain.utils.DateUtil;
 import com.financialtargets.outflow.domain.model.EssentialOutflow;
@@ -19,6 +20,7 @@ public class EssentialOutflowMapper {
         essentialOutflow.setValue(essentialOutflowCreateDTO.value());
         essentialOutflow.setPaidValue(essentialOutflowCreateDTO.paidValue());
         essentialOutflow.setNotes(essentialOutflowCreateDTO.notes());
+        essentialOutflow.setRecurrence(OutflowRecurrence.getRecurrenceByText(essentialOutflowCreateDTO.recurrence()));
         essentialOutflow.setDueDate(DateUtil.getStartOfDayByDate(essentialOutflowCreateDTO.dueDate()));
         essentialOutflow.setAccountId(essentialOutflowCreateDTO.accountId());
         essentialOutflow.setCreatedAt(DateUtil.getNowGlobalDate());

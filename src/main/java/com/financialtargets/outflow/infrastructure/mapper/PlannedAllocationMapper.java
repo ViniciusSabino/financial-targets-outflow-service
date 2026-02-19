@@ -5,6 +5,8 @@ import com.financialtargets.outflow.domain.model.PlannedAllocation;
 import com.financialtargets.outflow.infrastructure.entity.PlannedAllocationEntity;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+
 @Component("InfrastructurePlannedAllocationMapper")
 public class PlannedAllocationMapper {
     public PlannedAllocationEntity toEntity(PlannedAllocation allocation) {
@@ -25,6 +27,8 @@ public class PlannedAllocationMapper {
     
     public PlannedAllocation toModel(PlannedAllocationEntity entity) {
         PlannedAllocation allocation = new PlannedAllocation();
+
+        if (Objects.isNull(entity)) return allocation;
 
         allocation.setId(entity.getId());
         allocation.setName(entity.getName());

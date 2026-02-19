@@ -5,6 +5,8 @@ import com.financialtargets.outflow.domain.model.EssentialOutflow;
 import com.financialtargets.outflow.infrastructure.entity.EssentialOutflowEntity;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+
 @Component("InfrastructureEssentialOutflowMapper")
 public class EssentialOutflowMapper {
     public EssentialOutflowEntity toEntity(EssentialOutflow outflow) {
@@ -24,7 +26,10 @@ public class EssentialOutflowMapper {
     }
 
     public EssentialOutflow toModel(EssentialOutflowEntity entity) {
+
         EssentialOutflow outflow = new EssentialOutflow();
+
+        if (Objects.isNull(entity)) return outflow;
 
         outflow.setId(entity.getId());
         outflow.setName(entity.getName());
