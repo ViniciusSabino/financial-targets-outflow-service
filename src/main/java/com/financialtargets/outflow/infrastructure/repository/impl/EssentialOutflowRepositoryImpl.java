@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Objects;
 
 @Repository
 @RequiredArgsConstructor
@@ -59,11 +60,15 @@ public class EssentialOutflowRepositoryImpl implements EssentialOutflowRepositor
 
     @Override
     public EssentialOutflow update(EssentialOutflow outflow) throws ResourceNotFoundException {
-        EssentialOutflowEntity entity = mapper.toEntity(outflow);
+        EssentialOutflowEntity update = mapper.toEntity(outflow);
 
-        entity.setUser(usersJpaRepository.getReferenceById(outflow.getUserId()));
-        entity.setAccount(accountsJpaRepository.getReferenceById(outflow.getAccountId()));
+        EssentialOutflowEntity current = this.repository.getReferenceById(outflow.getId());
 
-        return mapper.toModel(repository.save(entity));
+        update.setUser(!Objects.isNull(outflow.getUserId()) ? this.usersJpaRepository.getReferenceById(outflow.getUserId()) : current.getUser());
+        update.setAccount(!Objects.isNull(outflow.getAccountId()) ? this.accountsJpaRepository.getReferenceById(outflow.getAccountId()) : current.getAccount());
+        
+        update.setId(outflow.getId());
+
+        return mapper.toModel(repository.save(update));
     }
 }

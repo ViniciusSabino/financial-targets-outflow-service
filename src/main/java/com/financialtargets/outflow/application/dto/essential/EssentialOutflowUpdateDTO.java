@@ -15,9 +15,6 @@ public record EssentialOutflowUpdateDTO(
         @JsonProperty("value")
         BigDecimal value,
 
-        @JsonProperty("dueDate")
-        String dueDate,
-
         @Min(0)
         @JsonProperty("paidValue")
         BigDecimal paidValue,

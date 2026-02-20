@@ -33,6 +33,10 @@ public class EssentialOutflowCreator extends CreateOutflowTemplate<EssentialOutf
 
     @Override
     protected void prepareSave(EssentialOutflow outflow) {
+        if (outflow.getPaidValue().compareTo(outflow.getValue()) >= 0) {
+            outflow.setPaidValue(outflow.getValue());
+        }
+
     }
 
     @Override

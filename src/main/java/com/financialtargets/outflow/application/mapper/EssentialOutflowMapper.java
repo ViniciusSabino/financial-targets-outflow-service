@@ -9,6 +9,9 @@ import com.financialtargets.outflow.domain.utils.DateUtil;
 import com.financialtargets.outflow.domain.model.EssentialOutflow;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+import java.util.Objects;
+
 @Component("ApplicationEssentialOutflowMapper")
 public class EssentialOutflowMapper {
 
@@ -26,30 +29,35 @@ public class EssentialOutflowMapper {
         essentialOutflow.setCreatedAt(DateUtil.getNowGlobalDate());
         essentialOutflow.setUpdatedAt(DateUtil.getNowGlobalDate());
 
-        if (essentialOutflowCreateDTO.paidValue().compareTo(essentialOutflowCreateDTO.value()) >= 0) {
-            essentialOutflow.setPaidValue(essentialOutflowCreateDTO.value());
-        }
-
         return essentialOutflow;
     }
 
-    public EssentialOutflow toModel(EssentialOutflowUpdateDTO essentialOutflowUpdateDTO) {
+    public EssentialOutflow toModel(String id, EssentialOutflowUpdateDTO essentialOutflowUpdateDTO) {
         EssentialOutflow essentialOutflow = new EssentialOutflow();
 
+        essentialOutflow.setId(Long.valueOf(id));
         essentialOutflow.setName(essentialOutflowUpdateDTO.name());
         essentialOutflow.setValue(essentialOutflowUpdateDTO.value());
         essentialOutflow.setPaidValue(essentialOutflowUpdateDTO.paidValue());
         essentialOutflow.setNotes(essentialOutflowUpdateDTO.notes());
         essentialOutflow.setUpdatedAt(DateUtil.getNowGlobalDate());
 
-        if (essentialOutflowUpdateDTO.paidValue().compareTo(essentialOutflowUpdateDTO.value()) >= 0) {
-            essentialOutflow.setPaidValue(essentialOutflowUpdateDTO.value());
-        }
-
         return essentialOutflow;
     }
 
     public EssentialOutflowResponseDTO toResponse(EssentialOutflow essentialOutflow) {
-        return EssentialOutflowResponseDTO.builder().id(essentialOutflow.getId()).name(essentialOutflow.getName()).value(AmountUtil.formatAmount(essentialOutflow.getValue())).paidValue(AmountUtil.formatAmount(essentialOutflow.getPaidValue())).isFullyPaid(essentialOutflow.isFullyPaid()).dueDate(DateUtil.formatDate(essentialOutflow.getDueDate())).notes(essentialOutflow.getNotes()).accountName(essentialOutflow.getAccountName()).recurrence(essentialOutflow.getRecurrence().getLabel()).createdAt(DateUtil.formatDateTime(essentialOutflow.getCreatedAt())).updatedAt(DateUtil.formatDateTime(essentialOutflow.getUpdatedAt())).build();
+        return EssentialOutflowResponseDTO.builder()
+                .id(essentialOutflow.getId())
+                .name(essentialOutflow.getName())
+                .value(AmountUtil.formatAmount(essentialOutflow.getValue()))
+                .paidValue(AmountUtil.formatAmount(essentialOutflow.getPaidValue()))
+                .isFullyPaid(essentialOutflow.isFullyPaid())
+                .dueDate(DateUtil.formatDate(essentialOutflow.getDueDate()))
+                .notes(essentialOutflow.getNotes())
+                .accountName(essentialOutflow.getAccountName())
+                .recurrence(essentialOutflow.getRecurrence().getLabel())
+                .createdAt(DateUtil.formatDateTime(essentialOutflow.getCreatedAt()))
+                .updatedAt(DateUtil.formatDateTime(essentialOutflow.getUpdatedAt()))
+                .build();
     }
 }

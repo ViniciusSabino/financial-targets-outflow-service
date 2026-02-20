@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Objects;
 
 @Repository
 @RequiredArgsConstructor
@@ -56,11 +57,13 @@ public class PlannedAllocationRepositoryImpl implements PlannedAllocationReposit
 
     @Override
     public PlannedAllocation update(PlannedAllocation allocation) throws ResourceNotFoundException {
-        PlannedAllocationEntity entity = mapper.toEntity(allocation);
+        PlannedAllocationEntity update = mapper.toEntity(allocation);
 
-        entity.setUser(usersJpaRepository.getReferenceById(allocation.getUserId()));
-        entity.setAccount(accountsJpaRepository.getReferenceById(allocation.getAccountId()));
+        PlannedAllocationEntity current = this.repository.getReferenceById(allocation.getId());
 
-        return mapper.toModel(repository.save(entity));
+        update.setUser(!Objects.isNull(allocation.getUserId()) ? this.usersJpaRepository.getReferenceById(allocation.getUserId()) : current.getUser());
+        update.setAccount(!Objects.isNull(allocation.getAccountId()) ? this.accountsJpaRepository.getReferenceById(allocation.getAccountId()) : current.getAccount());
+
+        return mapper.toModel(repository.save(update));
     }
 }

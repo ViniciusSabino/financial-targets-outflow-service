@@ -17,8 +17,8 @@ public class UpdateOutflowUseCase {
     private final EssentialOutflowUpdater updater;
     private final EssentialOutflowMapper mapper;
 
-    public EssentialOutflowResponseDTO update(Long id, EssentialOutflowUpdateDTO essentialOutflowUpdateDTO) throws Exception {
-        EssentialOutflow outflow = mapper.toModel(essentialOutflowUpdateDTO);
+    public EssentialOutflowResponseDTO update(String id, EssentialOutflowUpdateDTO essentialOutflowUpdateDTO) throws Exception {
+        EssentialOutflow outflow = mapper.toModel(id, essentialOutflowUpdateDTO);
 
         EssentialOutflow outflowUpdated = updater.processUpdate(outflow);
 

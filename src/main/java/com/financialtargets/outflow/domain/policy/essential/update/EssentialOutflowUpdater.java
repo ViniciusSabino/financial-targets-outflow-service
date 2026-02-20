@@ -38,8 +38,7 @@ public class EssentialOutflowUpdater extends UpdateOutflowTemplate<EssentialOutf
 
     @Override
     protected void prepareUpdate(EssentialOutflow update, EssentialOutflow current) {
-        if (!Objects.isNull(update.getAccountId()))
-            current.setAccountId(update.getAccountId());
+        if (!Objects.isNull(update.getAccountId()))  current.setAccountId(update.getAccountId());
 
         PaidValueCalculationPolicy policy = paidValueCalculationResolver.resolve(update);
 
@@ -50,6 +49,8 @@ public class EssentialOutflowUpdater extends UpdateOutflowTemplate<EssentialOutf
         if (!Objects.isNull(update.getDueDate())) current.setDueDate(update.getDueDate());
         if (!Objects.isNull(update.getNotes())) current.setNotes(update.getNotes());
         if (!Objects.isNull(update.getRecurrence())) current.setRecurrence(update.getRecurrence());
+
+        current.setFullyPaid(current.getPaidValue().compareTo(current.getValue()) >= 0);
 
         current.setUpdatedAt(DateUtil.getNowGlobalDate());
     }

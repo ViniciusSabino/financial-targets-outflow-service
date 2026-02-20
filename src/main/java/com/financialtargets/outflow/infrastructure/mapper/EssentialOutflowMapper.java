@@ -36,7 +36,7 @@ public class EssentialOutflowMapper {
         outflow.setAccountName(entity.getAccount().getName());
         outflow.setValue(entity.getValue());
         outflow.setPaidValue(entity.getPaidValue());
-        outflow.setFullyPaid(entity.getPaidValue().compareTo(entity.getValue()) >= 0);
+        outflow.setFullyPaid(entity.getIsFullyPaid());
         outflow.setDueDate(entity.getDueDate());
         outflow.setRecurrence(OutflowRecurrence.getRecurrenceById(entity.getId()));
         outflow.setNotes(entity.getNotes());

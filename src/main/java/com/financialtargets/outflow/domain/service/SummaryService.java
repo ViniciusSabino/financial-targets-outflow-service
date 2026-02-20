@@ -37,7 +37,7 @@ public class SummaryService {
         summary.setTotalAmountProcessed(essentialOutflowsTotalProcessed);
         summary.setTotalAmountRemaining(essentialOutflowsTotal.subtract(essentialOutflowsTotalProcessed));
 
-        if (incomesSummary.getTotalReceived().compareTo(new BigDecimal(0)) >= 0) {
+        if (incomesSummary.getTotalReceived().compareTo(new BigDecimal(0)) > 0) {
             summary.setPercentageOfIncomes(essentialOutflowsTotal.divide(incomesSummary.getTotalReceived(), 2, RoundingMode.HALF_UP).multiply(new BigDecimal(100)));
         }
 

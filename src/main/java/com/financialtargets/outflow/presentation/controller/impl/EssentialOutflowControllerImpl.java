@@ -61,7 +61,7 @@ public class EssentialOutflowControllerImpl implements EssentialOutflowControlle
         log.trace("PATCH /essential-outflow - Update a essential outflow for id: {}", id);
         log.debug("Request body: {}", essentialOutflowUpdateDTO);
 
-        EssentialOutflowResponseDTO essentialOutflow = updateOutflowUseCase.update(Long.valueOf(id), essentialOutflowUpdateDTO);
+        EssentialOutflowResponseDTO essentialOutflow = updateOutflowUseCase.update(id, essentialOutflowUpdateDTO);
 
         return ResponseEntity.status(HttpStatus.OK).body(essentialOutflow);
     }

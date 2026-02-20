@@ -7,6 +7,6 @@ import org.springframework.data.jpa.domain.Specification;
 public class EssentialOutflowSpecification {
     public static Specification<EssentialOutflowEntity> byFilter(DateFilter filter) {
         return (root, query, cb) ->
-                cb.between(root.get("date"), filter.getStartDate(), filter.getEndDate());
+                cb.between(root.get("dueDate"), filter.getStartDate(), filter.getEndDate());
     }
 }

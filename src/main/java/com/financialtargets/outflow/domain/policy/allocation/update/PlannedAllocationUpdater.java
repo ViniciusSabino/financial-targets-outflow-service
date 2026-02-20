@@ -57,6 +57,8 @@ public class PlannedAllocationUpdater extends UpdateOutflowTemplate<PlannedAlloc
         if (!Objects.isNull(update.getNotes())) current.setNotes(update.getNotes());
         if (!Objects.isNull(update.getRecurrence())) current.setRecurrence(update.getRecurrence());
 
+        current.setIsFullyApplied(current.getAppliedValue().compareTo(current.getValue()) >= 0);
+
         current.setUpdatedAt(DateUtil.getNowGlobalDate());
     }
 

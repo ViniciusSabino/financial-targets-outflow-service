@@ -36,7 +36,7 @@ public class PlannedAllocationMapper {
         allocation.setDefinedPercentage(entity.getDefinedPercentage());
         allocation.setValue(entity.getValue());
         allocation.setAppliedValue(entity.getAppliedValue());
-        allocation.setIsFullyApplied(entity.getAppliedValue().compareTo(entity.getValue()) >= 0);
+        allocation.setIsFullyApplied(entity.getIsFullyApplied());
         allocation.setAllocationDate(entity.getAllocationDate());
         allocation.setRecurrence(OutflowRecurrence.getRecurrenceById(entity.getId()));
         allocation.setNotes(entity.getNotes());

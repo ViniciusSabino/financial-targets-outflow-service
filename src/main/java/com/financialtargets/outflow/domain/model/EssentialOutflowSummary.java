@@ -11,4 +11,8 @@ public class EssentialOutflowSummary {
     private BigDecimal totalAmountProcessed;
     private BigDecimal totalAmountRemaining;
     private BigDecimal percentageOfIncomes;
+
+    public EssentialOutflowSummary() {
+        this.percentageOfIncomes = new BigDecimal(0);
+    }
 }

@@ -30,9 +30,6 @@ public record PlannedAllocationUpdateDTO(
         @JsonProperty("appliedValue")
         BigDecimal appliedValue,
 
-        @JsonProperty("allocationDate")
-        String allocationDate,
-
         @Length(max = 20)
         @JsonProperty("recurrence")
         String recurrence,

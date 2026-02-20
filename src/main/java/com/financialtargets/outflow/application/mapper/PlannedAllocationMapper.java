@@ -10,6 +10,7 @@ import com.financialtargets.outflow.domain.enums.OutflowRecurrence;
 import com.financialtargets.outflow.domain.model.PlannedAllocation;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 @Component("ApplicationPlannedAllocationMapper")
@@ -30,9 +31,6 @@ public class PlannedAllocationMapper {
         plannedAllocation.setUpdatedAt(DateUtil.getNowGlobalDate());
         plannedAllocation.setAllocationDate(DateUtil.getStartOfDayByDate(plannedAllocationCreateDTO.allocationDate()));
 
-        if (plannedAllocationCreateDTO.appliedValue().compareTo(plannedAllocation.getValue()) >= 0)
-            plannedAllocation.setAppliedValue(plannedAllocation.getValue());
-
         return plannedAllocation;
     }
 
@@ -47,10 +45,6 @@ public class PlannedAllocationMapper {
         plannedAllocation.setRecurrence(OutflowRecurrence.getRecurrenceByText(plannedAllocationUpdateDTO.recurrence()));
         plannedAllocation.setNotes(plannedAllocationUpdateDTO.notes());
         plannedAllocation.setUpdatedAt(DateUtil.getNowGlobalDate());
-
-        if (!Objects.isNull(plannedAllocationUpdateDTO.allocationDate())) {
-            plannedAllocation.setAllocationDate(DateUtil.getStartOfDayByDate(plannedAllocationUpdateDTO.allocationDate()));
-        }
 
         return plannedAllocation;
     }

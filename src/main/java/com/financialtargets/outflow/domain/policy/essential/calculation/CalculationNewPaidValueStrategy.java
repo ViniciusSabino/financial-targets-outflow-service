@@ -7,8 +7,8 @@ import java.util.Objects;
 public class CalculationNewPaidValueStrategy implements PaidValueCalculationPolicy{
     @Override
     public void calculate(EssentialOutflow current, EssentialOutflow update) {
-        if (Objects.isNull(update.getValue())) {
-            current.setPaidValue(update.getPaidValue().compareTo(current.getValue()) >= 0 ? current.getValue() : update.getPaidValue());
+        if (Objects.isNull(update.getPaidValue())) {
+            current.setPaidValue(current.getPaidValue().compareTo(update.getValue()) >= 0 ? update.getValue() : current.getPaidValue());
 
         } else {
             current.setPaidValue(update.getPaidValue().compareTo(update.getValue()) >= 0 ? update.getValue() : update.getPaidValue());
