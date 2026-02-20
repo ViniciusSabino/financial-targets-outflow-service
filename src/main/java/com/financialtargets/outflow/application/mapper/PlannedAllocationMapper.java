@@ -10,9 +10,6 @@ import com.financialtargets.outflow.domain.enums.OutflowRecurrence;
 import com.financialtargets.outflow.domain.model.PlannedAllocation;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
-import java.util.Objects;
-
 @Component("ApplicationPlannedAllocationMapper")
 public class PlannedAllocationMapper {
 
